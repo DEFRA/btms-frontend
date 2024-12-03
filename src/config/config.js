@@ -12,13 +12,6 @@ const isTest = process.env.NODE_ENV === 'test'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export const config = convict({
-  serviceVersion: {
-    doc: 'The service version, this variable is injected into your docker container in CDP environments',
-    format: String,
-    nullable: true,
-    default: null,
-    env: 'SERVICE_VERSION'
-  },
   env: {
     doc: 'The application environment.',
     format: ['production', 'development', 'test'],
@@ -28,8 +21,14 @@ export const config = convict({
   port: {
     doc: 'The port to bind.',
     format: 'port',
-    default: 3000,
+    default: 5001,
     env: 'PORT'
+  },
+  version: {
+    doc: 'The version number of the frontend service',
+    format: String,
+    default: '0.0.0 (local)',
+    env: 'CONTAINER_VERSION'
   },
   staticCacheTimeout: {
     doc: 'Static cache timeout in milliseconds',
@@ -68,6 +67,68 @@ export const config = convict({
     format: Boolean,
     default: isTest
   },
+  coreBackend: {
+    apiUrl: {
+      doc: 'The Trade Data Matching json:api backend.',
+      format: String,
+      default: 'http://btms-backend.localtest.me:5002',
+      env: 'CORE_BACKEND_API_URL'
+    },
+    exampleNotification: {
+      doc: 'An example CHED ID from the backend.',
+      format: String,
+      default: 'CHEDA.GB.2024.1009875',
+      env: 'TDM_API_EXAMPLE_NOTIFICATION'
+    },
+    apiVersion: {
+      doc: 'The version number of the backend service',
+      format: String,
+      default: '0.0.0 (local)'
+    }
+  },
+  appBaseUrl: {
+    doc: 'Application base URL for after we login',
+    format: String,
+    default: 'http://btms-frontend.localtest.me:5001',
+    env: 'APP_BASE_URL'
+  },
+  defraId: {
+    manageAccountUrl: {
+      doc: 'DEFRA ID Manage Account URL, defaults to docker compose defra ID stub',
+      format: String,
+      env: 'DEFRA_ID_MANAGE_ACCOUNT_URL',
+      default:
+        'http://cdp-defra-id-stub.localtest.me:9200/cdp-defra-id-stub/login'
+    },
+    oidcConfiguration: {
+      url: {
+        doc: 'DEFRA ID OIDC Configuration URL, defaults to docker compose defra ID stub',
+        format: String,
+        env: 'DEFRA_ID_OIDC_CONFIGURATION_URL',
+        default:
+          'http://cdp-defra-id-stub.localtest.me:9200/cdp-defra-id-stub/.well-known/openid-configuration'
+      }
+    },
+    serviceId: {
+      doc: 'DEFRA ID Service ID',
+      format: String,
+      env: 'DEFRA_ID_SERVICE_ID',
+      default: 'd7d72b79-9c62-ee11-8df0-000d3adf7047'
+    },
+    clientId: {
+      doc: 'DEFRA ID Client ID',
+      format: String,
+      env: 'DEFRA_ID_CLIENT_ID',
+      default: '2fb0d715-affa-4bf1-836e-44a464e3fbea'
+    },
+    clientSecret: {
+      doc: 'DEFRA ID Client Secret',
+      format: String,
+      sensitive: true,
+      env: 'DEFRA_ID_CLIENT_SECRET',
+      default: 'test_value'
+    }
+  },
   log: {
     enabled: {
       doc: 'Is logging enabled',
@@ -86,13 +147,6 @@ export const config = convict({
       format: ['ecs', 'pino-pretty'],
       default: isProduction ? 'ecs' : 'pino-pretty',
       env: 'LOG_FORMAT'
-    },
-    redact: {
-      doc: 'Log paths to redact',
-      format: Array,
-      default: isProduction
-        ? ['req.headers.authorization', 'req.headers.cookie', 'res.headers']
-        : ['req', 'res', 'responseTime']
     }
   },
   httpProxy: /** @type {SchemaObj<string | null>} */ ({
@@ -126,7 +180,7 @@ export const config = convict({
       engine: {
         doc: 'backend cache is written to',
         format: ['redis', 'memory'],
-        default: isProduction ? 'redis' : 'memory',
+        default: 'redis',
         env: 'SESSION_CACHE_ENGINE'
       },
       name: {
@@ -171,6 +225,13 @@ export const config = convict({
       default: '127.0.0.1',
       env: 'REDIS_HOST'
     },
+    port: {
+      doc: 'Redis cache port',
+      format: Number,
+      default: 6979,
+      env: 'REDIS_HOST'
+    },
+
     username: {
       doc: 'Redis cache username',
       format: String,
@@ -195,12 +256,6 @@ export const config = convict({
       format: Boolean,
       default: !isProduction,
       env: 'USE_SINGLE_INSTANCE_CACHE'
-    },
-    useTLS: {
-      doc: 'Connect to redis using TLS',
-      format: Boolean,
-      default: isProduction,
-      env: 'REDIS_TLS'
     }
   }),
   nunjucks: {

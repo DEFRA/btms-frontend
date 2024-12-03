@@ -1,10 +1,17 @@
 {% extends "govuk/template.njk" %}
 
-{# Import GOVUK components globally #}
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
-
-{# Import custom components globally #}
+{% from "breadcrumbs/macro.njk" import appBreadcrumbs %}
 {% from "heading/macro.njk" import appHeading %}
+
+{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{%- from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
 
 {% set mainClasses = "app-main-wrapper" %}
 
@@ -21,7 +28,7 @@
     serviceUrl: serviceUrl,
     useTudorCrown: true
   }) }}
-  {% include "partials/navigation/navigation.njk" %}
+  {% include "partials/navigation.njk" %}
 {% endblock %}
 
 {% block pageTitle %}
@@ -30,7 +37,7 @@
 
 {% block beforeContent %}
   {% if breadcrumbs.length > 1 %}
-    {{ govukBreadcrumbs({
+    {{ appBreadcrumbs({
       items: breadcrumbs
     }) }}
   {% endif %}

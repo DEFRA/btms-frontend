@@ -4,8 +4,8 @@ services:
   localstack:
     image: localstack/localstack:3.0.2
     ports:
-      - '4566:4566' # LocalStack Gateway
-      - '4510-4559:4510-4559' # external services port range
+      - '4966:4566' # LocalStack Gateway
+      - '4910-4959:4510-4559' # external services port range
     env_file:
       - 'compose/aws.env'
     environment:
@@ -27,66 +27,105 @@ services:
   redis:
     image: redis:7.2.3-alpine3.18
     ports:
-      - '6379:6379'
+      - '6979:6379'
     restart: always
     networks:
       - cdp-tenant
 
   mongodb:
+    # Initialise a Mongo cluster with a replicaset of 1 node.
+    # Based on https://medium.com/workleap/the-only-local-mongodb-replica-set-with-docker-compose-guide-youll-ever-need-2f0b74dd8384
+    # Since we are using transactions, we require a replicaset. Local dev with docker compose uses 1 node below, but our live
+    # environments have multiple nodes.
+    # The replicaset needs initialising, so the healthcheck can be hijacked to initialise this so that it can keep retrying
+    # until the operation is successful (might need to wait a while after container boot for this to work, hence the interval/retries)
+    # WARNING: do not turn on authentication, otherwise will need to deal with generating key pairs and sharing them between
+    # the replicaset nodes. For local development this is overkill, so just turn off auth and connect to Mongo without creds.
     image: mongo:6.0.13
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "29017"]
     networks:
       - cdp-tenant
     ports:
-      - '27017:27017'
+      - 29017:29017
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:29017'}]}) }" | mongosh --port 29017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
     volumes:
       - mongodb-data:/data
     restart: always
 
 ################################################################################
 
-  your-frontend:
-    build: ./
+  grafana:
+    build:
+      context: "../btms-telemetry-extensions"
     ports:
-      - '3000:3000'
+      - '9000:8085' # Nginx single port proxy
+      - '9001:3000' # Grafana UI direct for local testing only
+      - '9318:4318' # OpenTelemetry Collector for local testing only
+      - '9090:9090' # Prometheus direct for local testing only
+    volumes:
+      - "./compose/prometheus.yml:/otel-lgtm/prometheus.yaml:rw"
+    restart: always
+    networks:
+      cdp-tenant:
+        aliases:
+          - grafana.localtest.me
+
+#  prometheus:
+#    image: prom/prometheus
+#    ports:
+#      - '9090:9090'
+#    volumes:
+#      - "./compose/prometheus.yml:/etc/prometheus/prometheus.yml"
+
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/nightly/aspire-dashboard:8.2
+    ports:
+      - '18888:18888'
+      - '18889:18889'
+    restart: always
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
+    networks:
+      cdp-tenant:
+        aliases:
+          - aspire-dashboard.localtest.me
+
+  cdp-defra-id-stub:
+    build: https://github.com/DEFRA/cdp-defra-id-stub.git
+    ports:
+      - '9200:9200'
     links:
-      - 'localstack:localstack'
       - 'redis:redis'
     depends_on:
       localstack:
         condition: service_healthy
       redis:
         condition: service_started
-    env_file:
-      - 'compose/aws.env'
+    healthcheck:
+      test: ['CMD', 'curl', 'localhost:9200']
+      interval: 5s
+      start_period: 5s
+      retries: 3
+
     environment:
-      PORT: 3000
+      PORT: 9200
       NODE_ENV: development
       REDIS_HOST: redis
-      LOCALSTACK_ENDPOINT: http://localstack:4566
-      USE_SINGLE_INSTANCE_CACHE: true
+      # USE_SINGLE_INSTANCE_CACHE: true
+      APP_BASE_URL: http://cdp-defra-id-stub.localtest.me:9200
+      REDIS_ENABLED: true
     networks:
-      - cdp-tenant
-
-  # your-backend:
-  #   image: defradigital/your-backend:${YOUR_BACKEND_VERSION:-latest}
-  #   ports:
-  #     - '3555:3555'
-  #   links:
-  #     - 'localstack:localstack'
-  #     - 'mongodb:mongodb'
-  #   depends_on:
-  #     localstack:
-  #       condition: service_healthy
-  #     mongodb:
-  #       condition: service_started
-  #   env_file:
-  #     - 'compose/aws.env'
-  #   environment:
-  #     PORT: 3555
-  #     NODE_ENV: development
-  #     LOCALSTACK_ENDPOINT: http://localstack:4566
-  #   networks:
-  #     - cdp-tenant
+      cdp-tenant:
+        aliases:
+          - cdp-defra-id-stub.localtest.me
 
 ################################################################################
 

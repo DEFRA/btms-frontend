@@ -50,6 +50,7 @@ describe('#catchAll', () => {
   }
 
   test('Should provide expected "Not Found" page', () => {
+    // @ts-expect-error - Testing purposes only
     catchAll(mockRequest(statusCodes.notFound), mockToolkit)
 
     expect(mockErrorLogger).toHaveBeenCalledWith(mockStack)
@@ -62,6 +63,7 @@ describe('#catchAll', () => {
   })
 
   test('Should provide expected "Forbidden" page', () => {
+    // @ts-expect-error - Testing purposes only
     catchAll(mockRequest(statusCodes.forbidden), mockToolkit)
 
     expect(mockErrorLogger).toHaveBeenCalledWith(mockStack)
@@ -74,6 +76,7 @@ describe('#catchAll', () => {
   })
 
   test('Should provide expected "Unauthorized" page', () => {
+    // @ts-expect-error - Testing purposes only
     catchAll(mockRequest(statusCodes.unauthorized), mockToolkit)
 
     expect(mockErrorLogger).toHaveBeenCalledWith(mockStack)
@@ -86,6 +89,7 @@ describe('#catchAll', () => {
   })
 
   test('Should provide expected "Bad Request" page', () => {
+    // @ts-expect-error - Testing purposes only
     catchAll(mockRequest(statusCodes.badRequest), mockToolkit)
 
     expect(mockErrorLogger).toHaveBeenCalledWith(mockStack)
@@ -98,6 +102,7 @@ describe('#catchAll', () => {
   })
 
   test('Should provide expected default page', () => {
+    // @ts-expect-error - Testing purposes only
     catchAll(mockRequest(statusCodes.imATeapot), mockToolkit)
 
     expect(mockErrorLogger).toHaveBeenCalledWith(mockStack)

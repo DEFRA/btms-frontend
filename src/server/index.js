@@ -1,6 +1,8 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
 
+import basic from '@hapi/basic'
+
 import { config } from '~/src/config/config.js'
 import { nunjucksConfig } from '~/src/config/nunjucks/nunjucks.js'
 import { router } from './router.js'
@@ -10,11 +12,18 @@ import { secureContext } from '~/src/server/common/helpers/secure-context/index.
 import { sessionCache } from '~/src/server/common/helpers/session-cache/session-cache.js'
 import { getCacheEngine } from '~/src/server/common/helpers/session-cache/cache-engine.js'
 import { pulse } from '~/src/server/common/helpers/pulse.js'
+import { defraId } from '~/src/server/common/helpers/auth/defra-id.js'
+import { sessionCookie } from '~/src/server/common/helpers/auth/session-cookie.js'
+import { getUserSession } from '~/src/server/common/helpers/auth/get-user-session.js'
+import { dropUserSession } from '~/src/server/common/helpers/auth/drop-user-session.js'
 
 export async function createServer() {
   const server = hapi.server({
     port: config.get('port'),
     routes: {
+      auth: {
+        mode: 'required'
+      },
       validate: {
         options: {
           abortEarly: false
@@ -34,6 +43,10 @@ export async function createServer() {
         xframe: true
       }
     },
+    debug: {
+      log: ['*'],
+      request: ['*']
+    },
     router: {
       stripTrailingSlash: true
     },
@@ -44,20 +57,60 @@ export async function createServer() {
           /** @type {Engine} */ (config.get('session.cache.engine'))
         )
       }
-    ],
-    state: {
-      strictHeader: false
-    }
+    ]
   })
+
+  // @ts-expect-error unsure why it's so upset
+  server.app.cache = server.cache({
+    cache: 'session',
+    expiresIn: config.get('session.cache.ttl'),
+    segment: 'session'
+  })
+
+  server.decorate('request', 'getUserSession', getUserSession)
+  server.decorate('request', 'dropUserSession', dropUserSession)
 
   await server.register([
     requestLogger,
-    secureContext,
+    // secureContext,
     pulse,
     sessionCache,
     nunjucksConfig,
+    basic,
+    // defraId,
+    sessionCookie,
     router // Register all the controllers/routes defined in src/server/router.js
   ])
+
+  const validate = async (request, username, password) => {
+    const credentials = { id: 1, name: 'Test User' }
+    return { isValid: true, credentials }
+  }
+
+  // server.auth.strategy('simple', 'basic', { validate });
+
+  // server.auth.strategy('auth-session', 'cookie', {
+  //   password: "123",
+  //   cookie: { password: 'auth-sess' },
+  //   clearInvalid: true,
+  //   isSecure: process.env.NODE_ENV !== 'development',
+  //   ttl: 604800000, // milliseconds per week
+  //   redirectTo: '/signin',
+  //   redirectOnTry: false,
+  //   validateFunc: (request, session, callback) => {
+  //     server.app.cache.get(session.sid, (err, cached) => {
+  //       if (err) {
+  //         return callback(err, false);
+  //       }
+  //
+  //       if (!cached) {
+  //         return callback(null, false);
+  //       }
+  //
+  //       return callback(null, true)
+  //     })
+  //   }
+  // })
 
   server.ext('onPreResponse', catchAll)
 
