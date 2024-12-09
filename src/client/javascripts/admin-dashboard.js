@@ -101,13 +101,13 @@ export const setup = async function () {
       result.data.movementsLinkingByCreated
     )
 
-    createDateLineChart(
-      'movementsLinkingByArrival',
-      'Movements By Link Status',
-      'Arrival Date',
-      'day',
-      result.data.movementsLinkingByArrival
-    )
+    // createDateLineChart(
+    //   'movementsLinkingByArrival',
+    //   'Movements By Link Status',
+    //   'Arrival Date',
+    //   'day',
+    //   result.data.movementsLinkingByArrival
+    // )
 
     createLineChart(
       'lastMonthMovementsByItemCount',
