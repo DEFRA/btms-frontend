@@ -16,6 +16,7 @@ import { defraId } from '~/src/server/common/helpers/auth/defra-id.js'
 import { sessionCookie } from '~/src/server/common/helpers/auth/session-cookie.js'
 import { getUserSession } from '~/src/server/common/helpers/auth/get-user-session.js'
 import { dropUserSession } from '~/src/server/common/helpers/auth/drop-user-session.js'
+import { serverVersion } from '~/src/server/common/helpers/server-version.js'
 
 export async function createServer() {
   const server = hapi.server({
@@ -71,6 +72,7 @@ export async function createServer() {
   server.decorate('request', 'dropUserSession', dropUserSession)
 
   await server.register([
+    serverVersion,
     requestLogger,
     // secureContext,
     pulse,

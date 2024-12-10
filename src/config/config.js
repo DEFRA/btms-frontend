@@ -154,6 +154,7 @@ export const config = convict({
     format: String,
     nullable: true,
     default: null,
+    sensitive: true,
     env: 'CDP_HTTP_PROXY'
   }),
   httpsProxy: /** @type {SchemaObj<string | null>} */ ({
@@ -161,6 +162,7 @@ export const config = convict({
     format: String,
     nullable: true,
     default: null,
+    sensitive: true,
     env: 'CDP_HTTPS_PROXY'
   }),
   isSecureContextEnabled: {
