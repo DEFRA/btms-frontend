@@ -74,8 +74,8 @@
           preventDoubleClick: true
         }) }}
       </div>
-      </form>
     {% endcall %}
+  </form>
 
 
   <form method="post" action="/admin/clear-db" autocomplete="off" novalidate>
@@ -95,8 +95,33 @@
           preventDoubleClick: true
         }) }}
       </div>
-      </form>
+    {% endcall %}
+  </form>
 
+    {% call govukFieldset({
+      legend: {
+        text: "Configuration",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+
+      <ul>
+      {% for key, value in config %}
+        {% if value is mapping %}
+          <li>{{ key }} : object</li>
+          <ul>
+            {% for subkey, subvalue in value %}
+              <li>{{ subkey }} : {{ subvalue }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <li>{{ key }} : {{ value }}</li>
+        {% endif %}
+      {% else %}
+        <li>No configuration found</li>
+      {% endfor %}
+      </ul>
     {% endcall %}
 
 {% endblock %}

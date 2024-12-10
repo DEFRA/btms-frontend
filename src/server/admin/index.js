@@ -9,9 +9,9 @@ const admin = {
         {
           method: 'GET',
           path: '/admin',
-          // options: {
-          //   auth: { mode: 'try' }
-          // },
+          options: {
+            auth: { mode: 'try' }
+          },
           ...homeController
         },
         {
