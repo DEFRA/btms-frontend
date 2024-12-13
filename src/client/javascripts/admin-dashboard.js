@@ -66,13 +66,13 @@ export const setup = async function () {
       'lastMonthImportNotificationsByTypeAndStatus',
       'Last Month',
       'Import Notifications Created Last Month By CHED Type & Link Status',
-      result.data.lastMonthImportNotificationsByTypeAndStatus.values
+      result.data.lastMonthImportNotificationsByTypeAndStatus
     )
     createDoughnut(
       'lastMonthMovementsByStatus',
       'Last Month',
       'Movements Created Last Month By Link Status',
-      result.data.lastMonthMovementsByStatus.values
+      result.data.lastMonthMovementsByStatus
     )
 
     createImportNotificationsLinkingByArrival(
@@ -102,13 +102,13 @@ export const setup = async function () {
       'last7DaysImportNotificationsLinkingStatus',
       'Last 7 Days',
       'Import Notifications Created Last 7 Days By CHED Type & Link Status',
-      result.data.last7DaysImportNotificationsLinkingStatus.values
+      result.data.last7DaysImportNotificationsLinkingStatus
     )
     createDoughnut(
       'last24HoursImportNotificationsLinkingStatus',
       'Last 24 Hours',
       'Import Notifications Created Last 24 Hours By CHED Type & Link Status',
-      result.data.last24HoursImportNotificationsLinkingStatus.values
+      result.data.last24HoursImportNotificationsLinkingStatus
     )
 
     createDateLineChart(
@@ -155,7 +155,7 @@ export const setup = async function () {
       'lastMonthUniqueDocumentReferenceByMovementCount',
       'Last Month',
       'Movements Created Last Month Document References By Movement Count',
-      result.data.lastMonthUniqueDocumentReferenceByMovementCount.values
+      result.data.lastMonthUniqueDocumentReferenceByMovementCount
     )
   })()
 }
@@ -214,11 +214,13 @@ function createDateLineChart(
   const canvas = document.getElementById(elementId)
   logCanvasDimensions(elementId, canvas)
 
-  if (!data?.length) {
+  if (!data?.series?.length) {
     noData(elementId, canvas)
 
     return
   }
+
+  data = data.series
 
   const datasets = data.map((r) => ({
     label: r.name,
@@ -337,9 +339,11 @@ function createDoughnut(elementId, period, title, data) {
   const canvas = document.getElementById(elementId)
   logCanvasDimensions(elementId, canvas)
   if (!data) {
-    noData(elementId, canvas)
+    noData(elementId, canvas, title)
     return
   }
+
+  data = data.values
 
   const chartData = {
     labels: Object.keys(data),
