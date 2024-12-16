@@ -1,5 +1,73 @@
-version: '3.4'
 services:
+
+  btms-frontend:
+    build:
+      context: "./"
+      args:
+        PORT: 9081
+    ports:
+      - '9081:9081'
+    links:
+      - 'localstack:localstack'
+      - 'redis:redis'
+    depends_on:
+      localstack:
+        condition: service_healthy
+      btms-backend:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      cdp-defra-id-stub:
+        condition: service_healthy
+    env_file:
+      - path: 'compose/aws.env'
+        required: true
+      - path: 'compose/frontend.env'
+        required: true
+      - path: 'compose/frontend-local.env'
+        required: false
+    environment:
+      PORT: 9081
+      NODE_ENV: development
+      REDIS_HOST: redis.localtest.me
+      REDIS_PORT: 6979
+
+    networks:
+      cdp-tenant:
+        aliases:
+          - btms-frontend.localtest.me
+
+  btms-backend:
+    build:
+      context: "../btms-backend"
+    ports:
+      - '9080:8080'
+    links:
+      - 'localstack:localstack'
+      - 'mongodb:mongodb'
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    env_file:
+      - path: 'compose/aws.env'
+        required: true
+      - path: 'compose/backend.env'
+        required: true
+      - path: 'compose/backend-secrets.env'
+        required: true
+      - path: 'compose/backend-local.env'
+        required: false
+    healthcheck:
+      test: ['CMD', 'curl', 'localhost:8080/health']
+      interval: 5s
+      start_period: 5s
+      retries: 3
+    networks:
+      cdp-tenant:
+        aliases:
+          - btms-backend.localtest.me
 
   localstack:
     image: localstack/localstack:3.0.2
@@ -70,38 +138,18 @@ services:
       - '9001:3000' # Grafana UI direct for local testing only
       - '9318:4318' # OpenTelemetry Collector for local testing only
       - '9090:9090' # Prometheus direct for local testing only
-    volumes:
-      - "./compose/prometheus.yml:/otel-lgtm/prometheus.yaml:rw"
+#    volumes:
+#      - "./compose/prometheus.yml:/otel-lgtm/prometheus.yaml:rw"
     restart: always
     networks:
       cdp-tenant:
         aliases:
           - grafana.localtest.me
 
-#  prometheus:
-#    image: prom/prometheus
-#    ports:
-#      - '9090:9090'
-#    volumes:
-#      - "./compose/prometheus.yml:/etc/prometheus/prometheus.yml"
-
-  aspire-dashboard:
-    image: mcr.microsoft.com/dotnet/nightly/aspire-dashboard:8.2
-    ports:
-      - '18888:18888'
-      - '18889:18889'
-    restart: always
-    environment:
-      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
-    networks:
-      cdp-tenant:
-        aliases:
-          - aspire-dashboard.localtest.me
-
   cdp-defra-id-stub:
     build: https://github.com/DEFRA/cdp-defra-id-stub.git
     ports:
-      - '9200:9200'
+      - '9900:9900'
     links:
       - 'redis:redis'
     depends_on:
@@ -110,13 +158,13 @@ services:
       redis:
         condition: service_started
     healthcheck:
-      test: ['CMD', 'curl', 'localhost:9200']
+      test: ['CMD', 'curl', 'localhost:9900']
       interval: 5s
       start_period: 5s
       retries: 3
 
     environment:
-      PORT: 9200
+      PORT: 9900
       NODE_ENV: development
       REDIS_HOST: redis
       # USE_SINGLE_INSTANCE_CACHE: true
