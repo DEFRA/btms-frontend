@@ -53,14 +53,10 @@ services:
     env_file:
       - path: 'compose/aws.env'
         required: true
-      - path: '../btms-backend/Btms.Backend/Properties/local.env'
-        required: true
-      - path: 'compose/backend.env'
-        required: true
       - path: 'compose/backend.env'
         required: true
       - path: 'compose/backend-secrets.env'
-        required: false
+        required: true
       - path: 'compose/backend-local.env'
         required: false
     healthcheck:

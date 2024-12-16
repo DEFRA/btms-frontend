@@ -16,8 +16,9 @@ currently btms-backend & btms-telemetry-extension, but will also include btms-ga
 The compose config relies on a number of 'secrets' config files being present in the compose folder - these can be obtained from existing
 team members:
 
-- btms-backend/Btms.Backend/Properties/local.env
 - btms-frontend/compose/backend-secrets.env
+- btms-frontend/compose/backend-local.env
+- btms-frontend/compose/frontend-local.env
 
 The intention is that the compose setup works as much as possible 'out of the box' and provides a default starting
 point, but then once the services are up & working, a user can reconfigure them using the
@@ -27,7 +28,7 @@ point, but then once the services are up & working, a user can reconfigure them 
 
 Can then be used to bring up the solution. The services will then be available:
 
-- [btms-frontend](http://btms-frontend.localtest.me:9001/)
+- [btms-frontend](http://btms-frontend.localtest.me:9081/)
 - [btms-backend](http://btms-backend.localtest.me:9080/)
 - [grafana](http://grafana.localtest.me:9000/)
 
