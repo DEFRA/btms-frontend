@@ -98,7 +98,7 @@ export const config = convict({
       format: String,
       env: 'DEFRA_ID_MANAGE_ACCOUNT_URL',
       default:
-        'http://cdp-defra-id-stub.localtest.me:9200/cdp-defra-id-stub/login'
+        'http://cdp-defra-id-stub.localtest.me:9900/cdp-defra-id-stub/login'
     },
     oidcConfiguration: {
       url: {
@@ -106,7 +106,7 @@ export const config = convict({
         format: String,
         env: 'DEFRA_ID_OIDC_CONFIGURATION_URL',
         default:
-          'http://cdp-defra-id-stub.localtest.me:9200/cdp-defra-id-stub/.well-known/openid-configuration'
+          'http://cdp-defra-id-stub.localtest.me:9900/cdp-defra-id-stub/.well-known/openid-configuration'
       }
     },
     serviceId: {

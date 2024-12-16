@@ -60,6 +60,7 @@
     <Content Include="babel.config.cjs" />
     <Content Include="compose.yml" />
     <Content Include="compose\aws.env" />
+    <Content Include="compose\backend.env" />
     <Content Include="compose\start-localstack.sh" />
     <Content Include="Dockerfile" />
     <Content Include="jest.config.js" />
@@ -181,6 +182,23 @@
   <ItemGroup>
     <Folder Include=".git\objects\info\" />
     <Folder Include=".git\refs\tags\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compose\backend-local.env">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+    <None Include="compose\backend-secrets.env">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+    <None Include="compose\frontend-local.env">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

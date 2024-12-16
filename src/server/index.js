@@ -74,45 +74,15 @@ export async function createServer() {
   await server.register([
     serverVersion,
     requestLogger,
-    // secureContext,
+    secureContext,
     pulse,
     sessionCache,
     nunjucksConfig,
     basic,
-    // defraId,
+    defraId,
     sessionCookie,
     router // Register all the controllers/routes defined in src/server/router.js
   ])
-
-  const validate = async (request, username, password) => {
-    const credentials = { id: 1, name: 'Test User' }
-    return { isValid: true, credentials }
-  }
-
-  // server.auth.strategy('simple', 'basic', { validate });
-
-  // server.auth.strategy('auth-session', 'cookie', {
-  //   password: "123",
-  //   cookie: { password: 'auth-sess' },
-  //   clearInvalid: true,
-  //   isSecure: process.env.NODE_ENV !== 'development',
-  //   ttl: 604800000, // milliseconds per week
-  //   redirectTo: '/signin',
-  //   redirectOnTry: false,
-  //   validateFunc: (request, session, callback) => {
-  //     server.app.cache.get(session.sid, (err, cached) => {
-  //       if (err) {
-  //         return callback(err, false);
-  //       }
-  //
-  //       if (!cached) {
-  //         return callback(null, false);
-  //       }
-  //
-  //       return callback(null, true)
-  //     })
-  //   }
-  // })
 
   server.ext('onPreResponse', catchAll)
 
