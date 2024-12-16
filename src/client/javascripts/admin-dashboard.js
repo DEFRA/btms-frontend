@@ -279,13 +279,13 @@ function createLineChart(elementId, title, xAxisLabel, xAxisUnit, data) {
   const canvas = document.getElementById(elementId)
   logCanvasDimensions(elementId, canvas)
 
-  if (!data?.length) {
+  if (!data?.series?.length) {
     noData(elementId, canvas)
 
     return
   }
 
-  // data = data.slice(-1);
+  data = data.series
 
   const datasets = data.map((r) => ({
     label: r.name,
@@ -339,7 +339,7 @@ function createDoughnut(elementId, period, title, data) {
   const canvas = document.getElementById(elementId)
   logCanvasDimensions(elementId, canvas)
   if (!data) {
-    noData(elementId, canvas, title)
+    noData(elementId, canvas)
     return
   }
 
