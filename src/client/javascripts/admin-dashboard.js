@@ -339,7 +339,7 @@ function createDoughnut(elementId, period, title, data) {
   const canvas = document.getElementById(elementId)
   logCanvasDimensions(elementId, canvas)
   if (!data) {
-    noData(elementId, canvas, title)
+    noData(elementId, canvas)
     return
   }
 
