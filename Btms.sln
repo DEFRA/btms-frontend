@@ -88,6 +88,7 @@ EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Btms.Frontend", "Btms.Frontend.njsproj", "{541195E3-F0C5-4B56-A429-A5FE88238BE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BtmsTelemetry", "BtmsTelemetry", "{DA9D400F-A52F-4FF2-A736-E4EA5531275D}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "cdp-local-environment", "..\cdp-local-environment\cdp-local-environment.njsproj", "{57A6D73B-378F-400E-9EF1-60BE5D10C0C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
