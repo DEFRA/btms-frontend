@@ -57,107 +57,106 @@ const colourMap = {
 }
 
 export const setup = async function () {
-  await (async function () {
-    const url = `/auth/proxy/analytics/dashboard`
+  // (() => {
+  const url = `/auth/proxy/analytics/dashboard`
 
-    const result = await axios.get(url)
+  const result = await axios.get(url)
 
-    createDoughnut(
-      'lastMonthImportNotificationsByTypeAndStatus',
-      'Last Month',
-      'Import Notifications Created Last Month By CHED Type & Link Status',
-      result.data.lastMonthImportNotificationsByTypeAndStatus
-    )
-    createDoughnut(
-      'lastMonthMovementsByStatus',
-      'Last Month',
-      'Movements Created Last Month By Link Status',
-      result.data.lastMonthMovementsByStatus
-    )
+  createDoughnut(
+    'lastMonthImportNotificationsByTypeAndStatus',
+    'Last Month',
+    'Import Notifications Created Last Month By CHED Type & Link Status',
+    result.data.lastMonthImportNotificationsByTypeAndStatus
+  )
+  createDoughnut(
+    'lastMonthMovementsByStatus',
+    'Last Month',
+    'Movements Created Last Month By Link Status',
+    result.data.lastMonthMovementsByStatus
+  )
 
-    createImportNotificationsLinkingByArrival(
-      result.data.importNotificationLinkingByArrival
-    )
-    createImportNotificationsLinkingByCreated(
-      result.data.importNotificationLinkingByCreated
-    )
+  createImportNotificationsLinkingByArrival(
+    result.data.importNotificationLinkingByArrival
+  )
+  createImportNotificationsLinkingByCreated(
+    result.data.importNotificationLinkingByCreated
+  )
 
-    createDateLineChart(
-      'last24HoursImportNotificationsLinkingByCreated',
-      'Import Notifications Created Last 24 Hours By CHED Type & Link Status',
-      'Created Time',
-      'hour',
-      result.data.last24HoursImportNotificationsLinkingByCreated
-    )
+  createDateLineChart(
+    'last24HoursImportNotificationsLinkingByCreated',
+    'Import Notifications Created Last 24 Hours By CHED Type & Link Status',
+    'Created Time',
+    'hour',
+    result.data.last24HoursImportNotificationsLinkingByCreated
+  )
 
-    createDateLineChart(
-      'last24HoursMovementsLinkingByCreated',
-      'Movements Created Last 24 Hours By Link Status',
-      'Created Time',
-      'hour',
-      result.data.last24HoursMovementsLinkingByCreated
-    )
+  createDateLineChart(
+    'last24HoursMovementsLinkingByCreated',
+    'Movements Created Last 24 Hours By Link Status',
+    'Created Time',
+    'hour',
+    result.data.last24HoursMovementsLinkingByCreated
+  )
 
-    createDoughnut(
-      'last7DaysImportNotificationsLinkingStatus',
-      'Last 7 Days',
-      'Import Notifications Created Last 7 Days By CHED Type & Link Status',
-      result.data.last7DaysImportNotificationsLinkingStatus
-    )
-    createDoughnut(
-      'last24HoursImportNotificationsLinkingStatus',
-      'Last 24 Hours',
-      'Import Notifications Created Last 24 Hours By CHED Type & Link Status',
-      result.data.last24HoursImportNotificationsLinkingStatus
-    )
+  createDoughnut(
+    'last7DaysImportNotificationsLinkingStatus',
+    'Last 7 Days',
+    'Import Notifications Created Last 7 Days By CHED Type & Link Status',
+    result.data.last7DaysImportNotificationsLinkingStatus
+  )
+  createDoughnut(
+    'last24HoursImportNotificationsLinkingStatus',
+    'Last 24 Hours',
+    'Import Notifications Created Last 24 Hours By CHED Type & Link Status',
+    result.data.last24HoursImportNotificationsLinkingStatus
+  )
 
-    createDateLineChart(
-      'movementsLinkingByCreated',
-      'Movements By Link Status',
-      'Created Date',
-      'day',
-      result.data.movementsLinkingByCreated
-    )
+  createDateLineChart(
+    'movementsLinkingByCreated',
+    'Movements By Link Status',
+    'Created Date',
+    'day',
+    result.data.movementsLinkingByCreated
+  )
 
-    // createDateLineChart(
-    //   'movementsLinkingByArrival',
-    //   'Movements By Link Status',
-    //   'Arrival Date',
-    //   'day',
-    //   result.data.movementsLinkingByArrival
-    // )
+  // createDateLineChart(
+  //   'movementsLinkingByArrival',
+  //   'Movements By Link Status',
+  //   'Arrival Date',
+  //   'day',
+  //   result.data.movementsLinkingByArrival
+  // )
+  createLineChart(
+    'lastMonthMovementsByItemCount',
+    'Last Months Movements By Item Count',
+    'Item Count',
+    'count',
+    result.data.lastMonthMovementsByItemCount
+  )
 
-    createLineChart(
-      'lastMonthMovementsByItemCount',
-      'Last Months Movements By Item Count',
-      'Item Count',
-      'count',
-      result.data.lastMonthMovementsByItemCount
-    )
+  createLineChart(
+    'lastMonthImportNotificationsByCommodityCount',
+    'Last Months Import Notifications By Commodity Count',
+    'Commodity Count',
+    'count',
+    result.data.lastMonthImportNotificationsByCommodityCount
+  )
 
-    createLineChart(
-      'lastMonthImportNotificationsByCommodityCount',
-      'Last Months Import Notifications By Commodity Count',
-      'Commodity Count',
-      'count',
-      result.data.lastMonthImportNotificationsByCommodityCount
-    )
+  createLineChart(
+    'lastMonthMovementsByUniqueDocumentReferenceCount',
+    'Last Months Movements By Unique Document Reference Count',
+    'Item Count',
+    'count',
+    result.data.lastMonthMovementsByUniqueDocumentReferenceCount
+  )
 
-    createLineChart(
-      'lastMonthMovementsByUniqueDocumentReferenceCount',
-      'Last Months Movements By Unique Document Reference Count',
-      'Item Count',
-      'count',
-      result.data.lastMonthMovementsByUniqueDocumentReferenceCount
-    )
-
-    createDoughnut(
-      'lastMonthUniqueDocumentReferenceByMovementCount',
-      'Last Month',
-      'Movements Created Last Month Document References By Movement Count',
-      result.data.lastMonthUniqueDocumentReferenceByMovementCount
-    )
-  })()
+  createDoughnut(
+    'lastMonthUniqueDocumentReferenceByMovementCount',
+    'Last Month',
+    'Movements Created Last Month Document References By Movement Count',
+    result.data.lastMonthUniqueDocumentReferenceByMovementCount
+  )
+// })
 }
 
 /**

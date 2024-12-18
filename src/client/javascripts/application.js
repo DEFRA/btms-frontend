@@ -17,4 +17,8 @@ createAll(Header)
 createAll(Radios)
 createAll(SkipLink)
 
-await setup()
+
+// TBC : Not too sure how to make the analytics setup function available
+// so that it can be loaded only on analytics pages...
+
+window["analytics"] = setup

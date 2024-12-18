@@ -91,6 +91,8 @@
     <Content Include="src\config\nunjucks\context\build-navigation.test.js" />
     <Content Include="src\config\nunjucks\context\context.js" />
     <Content Include="src\config\nunjucks\context\context.test.js" />
+    <Content Include="src\config\nunjucks\filters\assign.js" />
+    <Content Include="src\config\nunjucks\filters\compact.js" />
     <Content Include="src\config\nunjucks\filters\filters.js" />
     <Content Include="src\config\nunjucks\filters\format-currency.js" />
     <Content Include="src\config\nunjucks\filters\format-currency.test.js" />
@@ -108,6 +110,8 @@
     <Content Include="src\server\admin\index.js" />
     <Content Include="src\server\admin\index.njk" />
     <Content Include="src\server\admin\sync.js" />
+    <Content Include="src\server\admin\view-history.njk" />
+    <Content Include="src\server\admin\viewHistory.js" />
     <Content Include="src\server\analytics\controller.js" />
     <Content Include="src\server\analytics\controller.test.js" />
     <Content Include="src\server\analytics\index.js" />

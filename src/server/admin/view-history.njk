@@ -1,0 +1,31 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading,
+    caption: "View History For MRN " + mrn
+  }) }}
+
+
+  {% call govukFieldset({
+    legend: {
+      text: "History",
+      classes: "govuk-fieldset__legend--l",
+      isPageHeading: false
+    }
+  }) %}
+
+    {{ appEntityList({
+        headings: [
+          { text: "Source", size: "small" },
+          { text: "Status", size: "small" },
+          { text: "Type", size: "medium" },
+          { text: "Id", size: "large" },
+          { text: "Time", size: "large" }
+        ],
+        entityRows: history,
+        noResult: "There is no history available at the moment"
+      }) }}
+  {% endcall %}
+
+{% endblock %}
