@@ -1,0 +1,98 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "tag/macro.njk" import appTag %}
+{% from "time/macro.njk" import appTime %}
+{% from "loader/macro.njk" import appLoader %}
+
+{% set element = 'li' if params.isChild else 'div' %}
+
+<{{ element }}
+{% if params.isChild %}
+  class="app-entity__list-item"
+{% else %}
+  class="app-entity"
+{% endif %}
+
+data-testid="app-entity{% if params.index %}-{{ params.index }}{% endif %}">
+
+{% if params.label %}
+  <span class="app-entity-label"
+        data-testid="app-entity-label">{{ params.label }}:</span>
+{% endif %}
+
+  {% if params.value or params.value == 0 %}
+
+    {% if params.kind === "link" %}
+      <a class="app-link"
+         href="{{ params.url }}"{% if params.newWindow %} target="_blank" rel="noopener noreferrer"{% endif %}
+         data-testid="app-entity-link">
+        {{ params.value }}
+      </a>
+
+      {% if params.icon %}
+        <span class="govuk-!-margin-left-1 govuk-!-margin-top-1">
+          {{ params.icon | safe }}
+        </span>
+      {% endif %}
+
+    {% elseif params.kind === "tag" %}
+      {{ appTag({
+        text: params.value,
+        classes: params.classes,
+        attributes: {
+          "data-testid": "govuk-tag"
+        },
+        url: params.url,
+        newWindow: params.newWindow,
+        link: {
+          classes: params.link.classes
+        } if params.link.classes
+      }) }}
+
+      {% if params.showLoader %}
+        {{ appLoader({ classes: "app-loader--is-loading" }) }}
+      {% endif %}
+
+    {% elseif params.kind === "date" %}
+      {{ appTime({
+        datetime: params.value,
+        withSeconds: params.withSeconds if params.withSeconds
+      }) }}
+
+    {% elseif params.kind === "text" %}
+      <span data-testid="app-entity-text"
+        {% if params.title %} title="{{ params.title }}"{% endif %}
+      >{{ params.value }}</span>
+
+    {% elseif params.kind === "html" %}
+      {{ params.value | safe }}
+
+    {% elseif params.kind === "list" %}
+      <ul class="app-entity__list">
+        {% for entity in params.value %}
+          {{ appEntity(entity | assign({}, { isChild: true }, entity)) }}
+        {% endfor %}
+      </ul>
+
+    {% elseif params.kind === "button" %}
+      <form action="{{ params.url }}" method="POST">
+        <input type="hidden" name="csrfToken" value={{csrfToken}}>
+        {{ govukButton({
+          classes: "app-button app-button--secondary" + " " + params.classes if params.classes else " ",
+          text: params.value})
+        }}
+      </form>
+
+    {% elseif params.kind === "group" %}
+
+      {% for entity in params.value %}
+        {{ appEntity(entity) }}
+      {% endfor %}
+
+    {% endif %}
+
+  {% else %}
+    <span class="app-entity-no-value">{{ noValue }}</span>
+  {% endif %}
+</{{ element }}>
+

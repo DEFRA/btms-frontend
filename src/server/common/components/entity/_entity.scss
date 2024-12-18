@@ -1,0 +1,32 @@
+.app-entity {
+  @include govuk-text-colour;
+  margin-right: govuk-spacing(1);
+  display: flex;
+  align-items: center;
+}
+
+.app-entity-label {
+  color: govuk-colour("dark-grey");
+  margin-right: govuk-spacing(1);
+}
+
+.app-entity-no-value {
+  margin-left: govuk-spacing(1);
+  color: govuk-colour("dark-grey");
+}
+
+.app-entity__list {
+  margin: 0;
+  @extend %govuk-list--bullet;
+}
+
+.app-entity__list-item {
+  @include govuk-text-colour;
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  & + * {
+    margin-top: govuk-spacing(1);
+  }
+}
