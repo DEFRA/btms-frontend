@@ -98,30 +98,62 @@
     {% endcall %}
   </form>
 
+
+  <form method="get" action="/admin/view-history" autocomplete="off" novalidate>
+
     {% call govukFieldset({
       legend: {
-        text: "Configuration",
+        text: "View History",
         classes: "govuk-fieldset__legend--l",
         isPageHeading: false
       }
     }) %}
 
-      <ul>
-      {% for key, value in config %}
-        {% if value is mapping %}
-          <li>{{ key }} : object</li>
-          <ul>
-            {% for subkey, subvalue in value %}
-              <li>{{ subkey }} : {{ subvalue }}</li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <li>{{ key }} : {{ value }}</li>
-        {% endif %}
-      {% else %}
-        <li>No configuration found</li>
-      {% endfor %}
-      </ul>
+      {{ govukInput({
+        label: {
+          text: "MRN",
+          classes: "govuk-label--m",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-30",
+        id: "mrn",
+        name: "mrn"
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "View History",
+          classes: "govuk-button--secondary",
+          preventDoubleClick: true
+        }) }}
+      </div>
     {% endcall %}
+  </form>
+
+  {% call govukFieldset({
+    legend: {
+      text: "Configuration",
+      classes: "govuk-fieldset__legend--l",
+      isPageHeading: false
+    }
+  }) %}
+
+    <ul>
+    {% for key, value in config %}
+      {% if value is mapping %}
+        <li>{{ key }} : object</li>
+        <ul>
+          {% for subkey, subvalue in value %}
+            <li>{{ subkey }} : {{ subvalue }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <li>{{ key }} : {{ value }}</li>
+      {% endif %}
+    {% else %}
+      <li>No configuration found</li>
+    {% endfor %}
+    </ul>
+  {% endcall %}
 
 {% endblock %}

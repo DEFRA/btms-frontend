@@ -108,6 +108,7 @@
     <Content Include="src\server\admin\index.js" />
     <Content Include="src\server\admin\index.njk" />
     <Content Include="src\server\admin\sync.js" />
+    <Content Include="src\server\admin\viewHistory.js" />
     <Content Include="src\server\analytics\controller.js" />
     <Content Include="src\server\analytics\controller.test.js" />
     <Content Include="src\server\analytics\index.js" />
