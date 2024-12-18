@@ -27,14 +27,14 @@ const viewHistoryController = {
     })
 
     const history = historyResponse.data.items.map((entry) => [
+      { kind: 'text', value: entry.auditEntry.createdBy },
+      { kind: 'text', value: entry.auditEntry.status },
+      { kind: 'text', value: entry.resourceType },
+      { kind: 'text', value: entry.resourceId },
       {
         kind: 'text',
         value: mediumDateTime(entry.auditEntry.createdSource)
-      },
-      { kind: 'text', value: entry.auditEntry.createdBy },
-      { kind: 'text', value: entry.resourceType },
-      { kind: 'text', value: entry.resourceId },
-      { kind: 'text', value: entry.auditEntry.status }
+      }
     ])
 
     return h.view('admin/view-history', {
