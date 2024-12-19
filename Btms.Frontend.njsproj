@@ -117,6 +117,8 @@
     <Content Include="src\server\admin\viewHistory.js" />
     <Content Include="src\server\analytics\controller.js" />
     <Content Include="src\server\analytics\controller.test.js" />
+    <Content Include="src\server\analytics\decisions.js" />
+    <Content Include="src\server\analytics\decisions.njk" />
     <Content Include="src\server\analytics\index.js" />
     <Content Include="src\server\analytics\index.njk" />
     <Content Include="src\server\auth\authenticated-proxy.js" />
