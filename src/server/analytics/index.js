@@ -1,4 +1,5 @@
 import { analyticsController } from '~/src/server/analytics/controller.js'
+import { decisionsController } from '~/src/server/analytics/decisions.js'
 
 /**
  * Sets up the routes used in the /about page.
@@ -17,6 +18,14 @@ export const analytics = {
             auth: { mode: 'try' }
           },
           ...analyticsController
+        },
+        {
+          method: 'GET',
+          path: '/analytics/decisions',
+          options: {
+            auth: { mode: 'try' }
+          },
+          ...decisionsController
         }
       ])
     }
