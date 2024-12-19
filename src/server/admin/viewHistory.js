@@ -31,10 +31,13 @@ const viewHistoryController = {
       { kind: 'text', value: entry.auditEntry.status },
       { kind: 'text', value: entry.resourceType },
       { kind: 'text', value: entry.resourceId },
+      { kind: 'text', value: entry.auditEntry.version },
       {
         kind: 'text',
         value: mediumDateTime(entry.auditEntry.createdSource)
-      }
+      },
+      // { kind: 'text', value: mediumDateTime(entry.auditEntry.createdLocal) }
+
     ])
 
     return h.view('admin/view-history', {

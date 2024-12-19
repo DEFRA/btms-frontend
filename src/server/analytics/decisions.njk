@@ -1,0 +1,38 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading,
+    caption: "Providing insights into the current state of decisions"
+  }) }}
+
+<div class="govuk-body" data-testid="app-page-body">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <div>
+
+      {% call govukFieldset({
+        legend: {
+          text: "Decisions",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: false
+        }
+      }) %}
+
+        {{ appEntityList({
+            headings: [
+              { text: "Decision", size: "small" },
+              { text: "ALVS", size: "small" },
+              { text: "BTMS", size: "small" }
+            ],
+            entityRows: decisions,
+            noResult: "There is no decision report available at the moment"
+          }) }}
+      {% endcall %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

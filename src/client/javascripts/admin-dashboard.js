@@ -57,7 +57,6 @@ const colourMap = {
 }
 
 export const setup = async function () {
-  // (() => {
   const url = `/auth/proxy/analytics/dashboard`
 
   const result = await axios.get(url)
@@ -156,7 +155,6 @@ export const setup = async function () {
     'Movements Created Last Month Document References By Movement Count',
     result.data.lastMonthUniqueDocumentReferenceByMovementCount
   )
-// })
 }
 
 /**
