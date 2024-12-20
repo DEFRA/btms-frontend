@@ -5,7 +5,9 @@
  */
 import axios from 'axios'
 import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
+import { number } from '~/src/server/common/helpers/format-number.js'
 import { config } from '~/src/config/config.js'
+import { mediumDateTime } from '../common/helpers/format-date-time.js'
 
 export const decisionsController = {
   async handler(request, h) {
@@ -23,10 +25,42 @@ export const decisionsController = {
       }
     })
 
-    const decisions = decisionResponse.data.lastMonthsDecisionsByDecisionCode.rows.map((row) =>
-      [{ kind: 'text', value: row.key }]
-        .concat(row.columns.map((c) =>
-          ({ kind: 'text', value: c.value }))))
+    const exceptionUrl = `${backendApi}/analytics/exceptions`
+
+    logger.info(`Making API call to ${exceptionUrl}`)
+
+    const exceptionResponse = await axios.get(exceptionUrl, {
+      headers: {
+        Authorization: `Bearer ${authedUser.jwt}`
+      }
+    })
+
+    const decisions = decisionResponse.data
+      .lastMonthsDecisionsByDecisionCode.result
+      .map((row) =>
+      [
+        { kind: 'text', value: row.fields.CheckCode },
+        { kind: 'text', value: row.fields.AlvsDecisionCode },
+        { kind: 'text', value: row.fields.BtmsDecisionCode },
+        { kind: 'text', value: row.value },
+        { kind: 'text', value: row.fields.Classification }
+      ])
+        // .concat(row.columns.map((c) =>
+        //   ({ kind: 'text', value: number(c.value) }))))
+
+    const exceptions = exceptionResponse.data.map((row) =>
+      [{ kind: 'link',
+        url: `/admin/view-history?mrn=${row.id}`,
+        value: row.id
+      },
+      { kind: 'text', value: row.itemCount },
+      { kind: 'text', value: row.maxEntryVersion },
+      { kind: 'text', value: row.maxDecisionNumber },
+      { kind: 'text', value: row.linkedCheds },
+      { kind: 'text', value: '' },
+      { kind: 'text', value: mediumDateTime(row.updatedSource) },
+      { kind: 'text', value: row.reason }]
+    )
 
     return h.view('analytics/decisions', {
       pageTitle: 'Decisions',
@@ -40,7 +74,8 @@ export const decisionsController = {
           text: 'Analytics'
         }
       ],
-      decisions
+      decisions,
+      exceptions
     })
   }
 }

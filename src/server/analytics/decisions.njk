@@ -8,8 +8,7 @@
 
 <div class="govuk-body" data-testid="app-page-body">
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <div>
+    <div class="govuk-grid-column-one-half">
 
       {% call govukFieldset({
         legend: {
@@ -21,18 +20,78 @@
 
         {{ appEntityList({
             headings: [
-              { text: "Decision", size: "small" },
-              { text: "ALVS", size: "small" },
-              { text: "BTMS", size: "small" }
+              { text: "Check Code", size: "small" },
+              { text: "Alvs Decision", size: "small" },
+              { text: "Btms Decision", size: "small" },
+              { text: "#", size: "small" },
+              { text: "Classification", size: "medium" }
             ],
             entityRows: decisions,
             noResult: "There is no decision report available at the moment"
           }) }}
       {% endcall %}
-      </div>
+
     </div>
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <canvas data-renderer="btms-dashboard" id="lastMonthsDecisionsByDecisionCode"></canvas>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <canvas data-renderer="btms-dashboard" id="allImportNotificationsByVersion"></canvas>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <canvas data-renderer="btms-dashboard" id="allMovementsByMaxEntryVersion"></canvas>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <canvas data-renderer="btms-dashboard" id="allMovementsByMaxDecisionNumber"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+          {% call govukFieldset({
+            legend: {
+              text: "Exceptions",
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: false
+            }
+          }) %}
+
+            {{ appEntityList({
+                headings: [
+                  { text: "MRN", size: "mrn" },
+                  { text: "Items", size: "small" },
+                  { text: "Max Entry Version", size: "small" },
+                  { text: "Max Decision #", size: "small" },
+                  { text: "# Linked CHEDs", size: "small" },
+                  { text: "Status", size: "small" },
+                  { text: "Updated", size: "medium" },
+                  { text: "Reason", size: "large" }
+                ],
+                entityRows: exceptions,
+                noResult: "There is no exceptions report available at the moment"
+              }) }}
+          {% endcall %}
+
+        </div>
+      </div>
   </div>
 
 </div>
 
+<script>
+window.onload = function(event) {
+  window["analytics"]()
+};
+</script>
 {% endblock %}

@@ -10,69 +10,69 @@
 <div class="govuk-body" data-testid="app-page-body">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-      <canvas id="lastMonthImportNotificationsByTypeAndStatus"></canvas>
+      <canvas data-renderer="btms-dashboard" id="lastMonthImportNotificationsByTypeAndStatus"></canvas>
     </div>
     <div class="govuk-grid-column-one-half">
-      <canvas id="lastMonthMovementsByStatus"></canvas>
+      <canvas data-renderer="btms-dashboard" id="lastMonthMovementsByStatus"></canvas>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-      <canvas id="last7DaysImportNotificationsLinkingStatus"></canvas>
+      <canvas data-renderer="btms-dashboard" id="last7DaysImportNotificationsLinkingStatus"></canvas>
     </div>
     <div class="govuk-grid-column-one-half">
-      <canvas id="last24HoursImportNotificationsLinkingStatus"></canvas>
+      <canvas data-renderer="btms-dashboard" id="last24HoursImportNotificationsLinkingStatus"></canvas>
     </div>
   </div>
   <hr class="govuk-section-break govuk-grid-column-full govuk-section-break--l govuk-section-break--visible"/>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="last24HoursMovementsLinkingByCreated"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="last24HoursMovementsLinkingByCreated"></canvas></div>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="last24HoursImportNotificationsLinkingByCreated"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="last24HoursImportNotificationsLinkingByCreated"></canvas></div>
     </div>
   </div>
 
   <hr class="govuk-section-break govuk-grid-column-full govuk-section-break--l govuk-section-break--visible"/>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="importNotificationsLinkingByCreated"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="importNotificationsLinkingByCreated"></canvas></div>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="importNotificationsLinkingByArrival"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="importNotificationsLinkingByArrival"></canvas></div>
     </div>
   </div>
   <hr class="govuk-section-break govuk-grid-column-full govuk-section-break--l govuk-section-break--visible"/>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="movementsLinkingByCreated"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="movementsLinkingByCreated"></canvas></div>
     </div>
   </div>
 
   <hr class="govuk-section-break govuk-grid-column-full govuk-section-break--l govuk-section-break--visible"/>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="lastMonthMovementsByItemCount"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="lastMonthMovementsByItemCount"></canvas></div>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="lastMonthMovementsByUniqueDocumentReferenceCount"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="lastMonthMovementsByUniqueDocumentReferenceCount"></canvas></div>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div><canvas id="lastMonthImportNotificationsByCommodityCount"></canvas></div>
+      <div><canvas data-renderer="btms-dashboard" id="lastMonthImportNotificationsByCommodityCount"></canvas></div>
     </div>
   </div>
   <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <canvas id="lastMonthUniqueDocumentReferenceByMovementCount"></canvas>
+        <canvas data-renderer="btms-dashboard" id="lastMonthUniqueDocumentReferenceByMovementCount"></canvas>
       </div>
       <div class="govuk-grid-column-one-half">
         <canvas id="todo"></canvas>
@@ -84,6 +84,5 @@
 window.onload = function(event) {
   window["analytics"]()
 };
-
 </script>
 {% endblock %}
