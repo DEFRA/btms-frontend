@@ -2,7 +2,7 @@ services:
 
   btms-frontend:
     build:
-      context: "./"
+      context: https://github.com/DEFRA/btms-frontend.git
       args:
         PORT: 9081
     ports:
@@ -38,8 +38,7 @@ services:
           - btms-frontend.localtest.me
 
   btms-backend:
-    build:
-      context: "../btms-backend"
+    build: https://github.com/DEFRA/btms-backend.git
     ports:
       - '9080:8080'
     links:
@@ -128,11 +127,10 @@ services:
       - mongodb-data:/data
     restart: always
 
-################################################################################
+#################################################################################
 
   grafana:
-    build:
-      context: "../btms-telemetry-extensions"
+    build: https://github.com/DEFRA/btms-telemetry-extensions.git
     ports:
       - '9000:8085' # Nginx single port proxy
       - '9001:3000' # Grafana UI direct for local testing only
