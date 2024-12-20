@@ -61,6 +61,9 @@
     <Content Include="compose.yml" />
     <Content Include="compose\aws.env" />
     <Content Include="compose\backend.env" />
+    <Content Include="compose\README.md" />
+    <Content Include="compose\scripts\generate-compose-bundle.sh" />
+    <Content Include="compose\scripts\local-setup.sh" />
     <Content Include="compose\start-localstack.sh" />
     <Content Include="Dockerfile" />
     <Content Include="jest.config.js" />

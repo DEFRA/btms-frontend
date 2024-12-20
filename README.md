@@ -10,47 +10,9 @@ This project includes a number of solution level resources, including a docker c
 
 ## Docker compose
 
-The docker compose stack assumes other BTMS service repos are present as siblings of this one,
-currently btms-backend & btms-telemetry-extension, but will also include btms-gateway & btms-gateway-stub.
+The guidance for existing and onboarding users for using the compose stack have been moved [here](./compose/README.md)
 
-The compose config relies on a number of 'secrets' config files being present in the compose folder - these can be obtained from existing
-team members:
-
-- btms-frontend/compose/backend-secrets.env
-- btms-frontend/compose/backend-local.env
-- btms-frontend/compose/frontend-local.env
-
-The intention is that the compose setup works as much as possible 'out of the box' and provides a default starting
-point, but then once the services are up & working, a user can reconfigure them using the
-.local config files, to enable different scenarios they may want to test. Different data sets for example.
-
-`docker compose up`
-
-Can then be used to bring up the solution. The services will then be available:
-
-- [btms-frontend](http://btms-frontend.localtest.me:9081/)
-- [btms-backend](http://btms-backend.localtest.me:9080/)
-- [grafana](http://grafana.localtest.me:9000/)
-
-Running the initialise method will load an initial dataset in from DMP:
-
-`http://btms-backend.localtest.me:9080/mgmt/initialise?syncPeriod=All`
-
-The state of the work can be seen here:
-
-`http://btms-backend.localtest.me:9080/sync/jobs`
-
-`http://btms-backend.localtest.me:9080/mgmt/collections`
-
-With logs & metrics:
-
-`http://grafana.localtest.me:9000/a/grafana-lokiexplore-app`
-
-`http://grafana.localtest.me:9000/d/ce451ma3l1nuoc/btms-backend`
-
-And the analytics dashboard here:
-
-`http://localhost:9081/analytics`
+## CDP Template
 
 The service is based on the CDP Node.js Frontend Template. Further background on that is provided here:
 
