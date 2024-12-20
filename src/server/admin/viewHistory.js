@@ -1,8 +1,7 @@
 import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
 import { config } from '~/src/config/config.js'
-import { mediumDateTime } from '~/src/server/common/helpers/date-time.js'
+import { mediumDateTime } from '~/src/server/common/helpers/format-date-time.js'
 import axios from 'axios'
-// import {data} from "autoprefixer";
 
 const viewHistoryController = {
   handler: async (request, h) => {
@@ -43,7 +42,24 @@ const viewHistoryController = {
     return h.view('admin/view-history', {
       pageTitle: 'Admin',
       heading: 'Admin',
-      manageAccountUrl: config.get('defraId.manageAccountUrl'),
+      breadcrumbs: [
+        {
+          text: 'Home',
+          href: '/'
+        },
+        {
+          text: 'Admin',
+          href: '/admin'
+        },
+        {
+          text: 'Mrn History',
+          href: '/admin'
+        },
+        {
+          text: request.query.mrn,
+          href: `/auth/proxy/api/movements/${request.query.mrn}`
+        }
+      ],
       history,
       mrn:request.query.mrn
     })
