@@ -12,10 +12,23 @@ import { mediumDateTime } from '../common/helpers/format-date-time.js'
 export const decisionsController = {
   async handler(request, h) {
     const logger = createLogger()
+    const requested = {
+      params: request.params,
+      query: request.query,
+      form: request.form
+    }
+    logger.info(`Decisions received request: ${JSON.stringify(requested)}`)
+
+    // Some temporary setup whilst we're trying to test a week of November data
+    let chedType = requested.query.chedType || "cheda"
+    let country = requested.query.country || "fr"
+    let dateFrom = requested.query.dateFrom || "2024-11-18"
+    let dateTo = requested.query.dateTo || "2024-11-25"
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
-    const url = `${backendApi}/analytics/dashboard?chartsToRender=lastMonthsDecisionsByDecisionCode`
+    const qs = `chedType=${chedType}&country=${country}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+    const url = `${backendApi}/analytics/dashboard?chartsToRender=decisionsByDecisionCode&${qs}`
 
     logger.info(`Making API call to ${url}`)
 
@@ -25,7 +38,7 @@ export const decisionsController = {
       }
     })
 
-    const exceptionUrl = `${backendApi}/analytics/exceptions`
+    const exceptionUrl = `${backendApi}/analytics/exceptions?${qs}`
 
     logger.info(`Making API call to ${exceptionUrl}`)
 
@@ -36,7 +49,7 @@ export const decisionsController = {
     })
 
     const decisions = decisionResponse.data
-      .lastMonthsDecisionsByDecisionCode.result
+      .decisionsByDecisionCode.result
       .map((row) =>
       [
         { kind: 'text', value: row.fields.CheckCode },
@@ -75,7 +88,8 @@ export const decisionsController = {
         }
       ],
       decisions,
-      exceptions
+      exceptions,
+      analyticsFilter: qs
     })
   }
 }

@@ -64,12 +64,13 @@ const colourMap = {
   'Alvs Decision Not Present': 'rgb(99,99,99)',
 }
 
-export const setup = async function () {
+export const setup = async function (analyticsFilter) {
 
   const charts = [...document.querySelectorAll('[data-renderer="btms-dashboard"]')]
   const chartNames = charts.map((c) => c.id)
 
-  const url = `/auth/proxy/analytics/dashboard?chartsToRender=${chartNames.join('&chartsToRender=')}`
+  if (analyticsFilter) analyticsFilter = `&${analyticsFilter}`
+  const url = `/auth/proxy/analytics/dashboard?chartsToRender=${chartNames.join('&chartsToRender=')}${analyticsFilter}`
   const result = await axios.get(url)
 
   createDoughnut(
@@ -168,39 +169,48 @@ export const setup = async function () {
   )
 
   createDoughnut(
-    'allImportNotificationsByVersion',
+    'importNotificationsByVersion',
     'All',
     'Import Notifications By Max Version Number',
-    result.data.allImportNotificationsByVersion,
+    result.data.importNotificationsByVersion,
     'bottom'
   )
 
   createDoughnut(
-    'allMovementsByMaxEntryVersion',
+    'movementsByMaxEntryVersion',
     'All',
     'Movements By Max Entry Version Number',
-    result.data.allMovementsByMaxEntryVersion,
+    result.data.movementsByMaxEntryVersion,
     'bottom'
   )
 
   createDoughnut(
-    'allMovementsByMaxDecisionNumber',
+    'movementsByMaxDecisionNumber',
     'All',
     'Movements By Max Decision Number',
-    result.data.allMovementsByMaxDecisionNumber,
+    result.data.movementsByMaxDecisionNumber,
     'bottom'
   )
 
   // At the moment we're returning multiple decision datasets
-  if (result.data.lastMonthsDecisionsByDecisionCode) {
+  if (result.data.decisionsByDecisionCode) {
     createDoughnut(
-      'lastMonthsDecisionsByDecisionCode',
+      'decisionsByDecisionCode',
       'All',
       'Decision Classification',
-      result.data.lastMonthsDecisionsByDecisionCode.summary,
+      result.data.decisionsByDecisionCode.summary,
       'bottom'
     )
   }
+
+  createDoughnut(
+    'movementsExceptions',
+    'All',
+    'Movement Exceptions',
+    result.data.movementsExceptions,
+    'bottom'
+  )
+
 }
 
 /**

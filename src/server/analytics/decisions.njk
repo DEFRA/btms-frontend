@@ -7,6 +7,106 @@
   }) }}
 
 <div class="govuk-body" data-testid="app-page-body">
+
+
+  <form method="get" action="/analytics/decisions" autocomplete="off" novalidate>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+
+          {{ govukSelect({
+            id: "chedType",
+            name: "chedType",
+            label: {
+              text: "Ched Type"
+            },
+            items: [
+              {
+                value: "cheda",
+                text: "CHEDA",
+                selected: true
+              },
+              {
+                value: "all",
+                text: "All"
+              }
+            ]
+          }) }}
+          {{ govukSelect({
+            id: "country",
+            name: "country",
+            label: {
+              text: "Country Of Origin"
+            },
+            items: [
+              {
+                value: "FR",
+                text: "France",
+                selected: true
+              },
+              {
+                value: "all",
+                text: "All"
+              }
+            ]
+          }) }}
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Apply",
+              classes: "govuk-button--primary",
+              preventDoubleClick: true
+            }) }}
+          </div>
+
+
+    </div>
+    <div class="govuk-grid-column-one-third">
+
+          {{ govukSelect({
+            id: "dateFrom",
+            name: "dateFrom",
+            label: {
+              text: "Date From"
+            },
+            items: [
+              {
+                value: "2024-11-18",
+                text: "18th November",
+                selected: true
+              },
+              {
+                value: "all",
+                text: "All"
+              }
+            ]
+          }) }}
+
+          {{ govukSelect({
+            id: "dateTo",
+            name: "dateTo",
+            label: {
+              text: "Date To"
+            },
+            items: [
+              {
+                value: "2024-11-25",
+                text: "25th November",
+                selected: true
+              },
+              {
+                value: "all",
+                text: "All"
+              }
+            ]
+          }) }}
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+
+    </div>
+  </div>
+  </form>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
 
@@ -17,6 +117,7 @@
           isPageHeading: false
         }
       }) %}
+
 
         {{ appEntityList({
             headings: [
@@ -35,22 +136,27 @@
     <div class="govuk-grid-column-one-half">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <canvas data-renderer="btms-dashboard" id="lastMonthsDecisionsByDecisionCode"></canvas>
+          <canvas data-renderer="btms-dashboard" id="movementsExceptions"></canvas>
         </div>
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <canvas data-renderer="btms-dashboard" id="allImportNotificationsByVersion"></canvas>
+          <canvas data-renderer="btms-dashboard" id="decisionsByDecisionCode"></canvas>
         </div>
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <canvas data-renderer="btms-dashboard" id="allMovementsByMaxEntryVersion"></canvas>
+          <canvas data-renderer="btms-dashboard" id="importNotificationsByVersion"></canvas>
         </div>
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <canvas data-renderer="btms-dashboard" id="allMovementsByMaxDecisionNumber"></canvas>
+          <canvas data-renderer="btms-dashboard" id="movementsByMaxEntryVersion"></canvas>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <canvas data-renderer="btms-dashboard" id="movementsByMaxDecisionNumber"></canvas>
         </div>
       </div>
 
@@ -79,7 +185,7 @@
                   { text: "Reason", size: "large" }
                 ],
                 entityRows: exceptions,
-                noResult: "There is no exceptions report available at the moment"
+                noResult: "There are no exceptions to report at the moment"
               }) }}
           {% endcall %}
 
@@ -91,7 +197,7 @@
 
 <script>
 window.onload = function(event) {
-  window["analytics"]()
+  window["analytics"]("{{analyticsFilter|safe }}")
 };
 </script>
 {% endblock %}
