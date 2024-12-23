@@ -36,4 +36,5 @@ pushd /tmp/btms
 zip -r /tmp/btms/btms.zip *
 popd
 
-echo "File is ready to pass on from /tmp/btms/btms.zip"
+mv /tmp/btms/btms.zip ~/Downloads
+echo "File is ready to pass on from ~/Downloads/btms.zip"
