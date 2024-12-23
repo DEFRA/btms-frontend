@@ -47,19 +47,30 @@ const colourMap = {
   'CHEDP Not Linked': 'rgb(244,164,96)',
   'CHEDPP Linked': 'rgb(0,255,0)',
   'CHEDPP Not Linked': 'rgb(173,255,47)',
-  Linked: 'rgb(128,128,128)',
+  'Linked': 'rgb(128,128,128)',
   'Not Linked': 'rgb(224,224,224)',
+  0: 'rgb(169,169,169)',
   1: 'rgb(169,169,169)',
-  2: 'rgb(105,105,105)',
-  3: 'rgb(85,85,85)',
-  4: 'rgb(45,45,45)',
-  5: 'rgb(25,25,25)'
+  2: 'rgb(99,99,99)',
+  3: 'rgb(99,99,99)',
+  4: 'rgb(99,99,99)',
+  // 5: 'rgb(169,169,169)',
+  // 6: 'rgb(45,45,45)',
+  // 7: 'rgb(25,25,25)',
+  'largeNumber': 'rgb(0,0,0)',
+  'Alvs Decision Version 1 Not Present': 'rgb(99,99,99)',
+  'Btms Made Same Decision As Alvs': 'rgb(169,169,169)',
+  'Btms Made Different Decision To Alvs': 'rgb(0,0,0)',
+  'Alvs Decision Not Present': 'rgb(99,99,99)',
 }
 
-export const setup = async function () {
-  // (() => {
-  const url = `/auth/proxy/analytics/dashboard`
+export const setup = async function (analyticsFilter) {
 
+  const charts = [...document.querySelectorAll('[data-renderer="btms-dashboard"]')]
+  const chartNames = charts.map((c) => c.id)
+
+  if (analyticsFilter) analyticsFilter = `&${analyticsFilter}`
+  const url = `/auth/proxy/analytics/dashboard?chartsToRender=${chartNames.join('&chartsToRender=')}${analyticsFilter}`
   const result = await axios.get(url)
 
   createDoughnut(
@@ -156,7 +167,50 @@ export const setup = async function () {
     'Movements Created Last Month Document References By Movement Count',
     result.data.lastMonthUniqueDocumentReferenceByMovementCount
   )
-// })
+
+  createDoughnut(
+    'importNotificationsByVersion',
+    'All',
+    'Import Notifications By Max Version Number',
+    result.data.importNotificationsByVersion,
+    'bottom'
+  )
+
+  createDoughnut(
+    'movementsByMaxEntryVersion',
+    'All',
+    'Movements By Max Entry Version Number',
+    result.data.movementsByMaxEntryVersion,
+    'bottom'
+  )
+
+  createDoughnut(
+    'movementsByMaxDecisionNumber',
+    'All',
+    'Movements By Max Decision Number',
+    result.data.movementsByMaxDecisionNumber,
+    'bottom'
+  )
+
+  // At the moment we're returning multiple decision datasets
+  if (result.data.decisionsByDecisionCode) {
+    createDoughnut(
+      'decisionsByDecisionCode',
+      'All',
+      'Decision Classification',
+      result.data.decisionsByDecisionCode.summary,
+      'bottom'
+    )
+  }
+
+  createDoughnut(
+    'movementsExceptions',
+    'All',
+    'Movement Exceptions',
+    result.data.movementsExceptions,
+    'bottom'
+  )
+
 }
 
 /**
@@ -211,6 +265,8 @@ function createDateLineChart(
   data
 ) {
   const canvas = document.getElementById(elementId)
+  if (!canvas) return
+
   logCanvasDimensions(elementId, canvas)
 
   if (!data?.series?.length) {
@@ -276,6 +332,8 @@ function createDateLineChart(
  */
 function createLineChart(elementId, title, xAxisLabel, xAxisUnit, data) {
   const canvas = document.getElementById(elementId)
+  if (!canvas) return
+
   logCanvasDimensions(elementId, canvas)
 
   if (!data?.series?.length) {
@@ -334,8 +392,10 @@ function createLineChart(elementId, title, xAxisLabel, xAxisUnit, data) {
   })
 }
 
-function createDoughnut(elementId, period, title, data) {
+function createDoughnut(elementId, period, title, data, legendPosition='left') {
   const canvas = document.getElementById(elementId)
+  if (!canvas) return
+
   logCanvasDimensions(elementId, canvas)
   if (!data) {
     noData(elementId, canvas)
@@ -350,7 +410,7 @@ function createDoughnut(elementId, period, title, data) {
       {
         label: title,
         data: Object.values(data),
-        backgroundColor: Object.keys(data).map((k) => colourMap[k]),
+        backgroundColor: Object.keys(data).map((k) => colourMap[k] || colourMap['largeNumber']),
         hoverOffset: 4
       }
     ]
@@ -366,22 +426,10 @@ function createDoughnut(elementId, period, title, data) {
     options: {
       maintainAspectRatio: false,
       responsive: true,
-
-      // hover: {
-      //   mode: 'nearest',
-      //   intersect: false,
-      //   onHover: function (e, item) {
-      //     console.log('onhover', item)
-      //     if (item.length) {
-      //       const data = item[0]._chart.config.data.datasets[0].data[item[0]._index];
-      //       console.log(item, data);
-      //     }
-      //   }
-      // },
       plugins: {
         legend: {
           // display: false
-          position: 'left'
+          position: legendPosition
         },
         tooltip: {
           enabled: true

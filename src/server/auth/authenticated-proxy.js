@@ -2,6 +2,7 @@ import { get as httpsGet } from 'https'
 import { get as httpGet } from 'http'
 import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
 import { config } from '~/src/config/config.js'
+import { stringify } from 'qs'
 
 const authenticatedProxyController = {
   handler: async (request) => {
@@ -13,13 +14,15 @@ const authenticatedProxyController = {
 
     const authedUser = await request.getUserSession()
     const backendApi = new URL(config.get('coreBackend.apiUrl'))
-    const searchParams = new URLSearchParams(request.query)
-    const qs = searchParams.size ? `?${searchParams.toString()}` : ''
+    const qs = stringify(request.query, { indices: false, encode: false })
+    // const searchParams = new URLSearchParams(request.query)
+
+    // const qs = searchParams.size ? `?${searchParams.toString()}` : ''
     return new Promise((resolve, reject) => {
       const options = {
         hostname: backendApi.hostname,
         port: backendApi.port,
-        path: `/${request.params.path}${qs}`,
+        path: `/${request.params.path}?${qs}`,
         query: request.query,
         method: 'GET',
         headers: {
