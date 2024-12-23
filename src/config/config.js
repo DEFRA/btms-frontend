@@ -78,7 +78,19 @@ export const config = convict({
       doc: 'An example CHED ID from the backend.',
       format: String,
       default: 'CHEDA.GB.2024.1009875',
-      env: 'TDM_API_EXAMPLE_NOTIFICATION'
+      env: 'CORE_BACKEND_API_EXAMPLE_NOTIFICATION'
+    },
+    apiUsername: {
+      doc: 'Username for backend API Auth.',
+      format: String,
+      default: 'BtmsFrontend',
+      env: 'CORE_BACKEND_API_USERNAME'
+    },
+    apiPassword: {
+      doc: 'Password for backend API Auth.',
+      format: String,
+      default: 'a498HnJ79A5G',
+      env: 'CORE_BACKEND_API_PASSWORD'
     },
     apiVersion: {
       doc: 'The version number of the backend service',

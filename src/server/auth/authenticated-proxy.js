@@ -15,6 +15,7 @@ const authenticatedProxyController = {
     const authedUser = await request.getUserSession()
     const backendApi = new URL(config.get('coreBackend.apiUrl'))
     const qs = stringify(request.query, { indices: false, encode: false })
+    const auth = Buffer.from(config.get('coreBackend.apiUsername') + ':' + config.get('coreBackend.apiPassword')).toString('base64')
     // const searchParams = new URLSearchParams(request.query)
 
     // const qs = searchParams.size ? `?${searchParams.toString()}` : ''
@@ -26,7 +27,7 @@ const authenticatedProxyController = {
         query: request.query,
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${authedUser.jwt}` // token
+          Authorization: 'Basic ' + auth
         }
       }
 

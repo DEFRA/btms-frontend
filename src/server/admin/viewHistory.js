@@ -29,7 +29,12 @@ const viewHistoryController = {
       { kind: 'text', value: entry.auditEntry.createdBy },
       { kind: 'text', value: entry.auditEntry.status },
       { kind: 'text', value: entry.resourceType },
-      { kind: 'text', value: entry.resourceId },
+      // { kind: 'text', value: entry.resourceId },
+      { kind: 'link',
+        newWindow: true,
+        url: `/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}`,
+        value: entry.resourceId
+      },
       { kind: 'text', value: entry.auditEntry.version },
       {
         kind: 'text',
