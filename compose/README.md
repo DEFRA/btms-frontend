@@ -27,7 +27,7 @@ The onboarding person will need to ensure a number of tools are present on their
 - A recent docker runtime - this could be docker desktop for example
 - Git
 - A code editor
-- Firewall access to the SND DMP data lake
+- Firewall access to the SND DMP data lake (configure in Azure portal)
 
 ## Existing person
 
@@ -56,6 +56,14 @@ in your web browser of choice :
 - [btms-frontend](http://btms-frontend.localtest.me:9081/)
 - [btms-backend](http://btms-backend.localtest.me:9080/)
 - [grafana](http://grafana.localtest.me:9000/)
+
+Confirm you have access to blob storage (requires firewall config in Azure portal):
+
+`http://btms-backend.localtest.me:9080/diagnostics/blob`
+
+The overall health endpoint may also diagnose other issues:
+
+`http://btms-backend.localtest.me:9080/health-dotnet`
 
 Running the initialise method will load an initial dataset in from DMP:
 
