@@ -9,6 +9,30 @@
 
   {% call govukFieldset({
     legend: {
+      text: "Checks",
+      classes: "govuk-fieldset__legend--l",
+      isPageHeading: false
+    }
+  }) %}
+
+    {{ appEntityList({
+        headings: [
+          { text: "Item", size: "small" },
+          { text: "Check Code", size: "small" },
+          { text: "Document Ref", size: "large" },
+          { text: "Btms Decision", size: "small" },
+          { text: "Btms Decision Number", size: "small" },
+          { text: "Alvs Decision", size: "small" },
+          { text: "Alvs Decision Number", size: "small" },
+          { text: "System Time", size: "medium" }
+        ],
+        entityRows: checks,
+        noResult: "There are no checks on this movement"
+      }) }}
+  {% endcall %}
+
+  {% call govukFieldset({
+    legend: {
       text: "History",
       classes: "govuk-fieldset__legend--l",
       isPageHeading: false

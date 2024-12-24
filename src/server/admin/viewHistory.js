@@ -11,17 +11,19 @@ const viewHistoryController = {
       query: request.query,
       form: request.form
     }
+    const auth = Buffer.from(config.get('coreBackend.apiUsername') + ':' + config.get('coreBackend.apiPassword')).toString('base64')
+
     logger.info(`View history received request: ${JSON.stringify(requested)}`)
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
-    const url = `${backendApi}/analytics/timeline?movementId=${request.query.mrn}`
+    let url = `${backendApi}/analytics/timeline?movementId=${request.query.mrn}`
 
     logger.info(`Making API call to ${url}`)
 
     const historyResponse = await axios.get(url, {
       headers: {
-        Authorization: `Bearer ${authedUser.jwt}`
+        Authorization: 'Basic ' + auth
       }
     })
 
@@ -42,6 +44,39 @@ const viewHistoryController = {
       },
       // { kind: 'text', value: mediumDateTime(entry.auditEntry.createdLocal) }
 
+    ])
+
+    url = `${backendApi}/api/movements/${request.query.mrn}`
+
+    logger.info(`Making API call to ${url}`)
+
+    const movementResponse = await axios.get(url, {
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    })
+
+    // TODO - may want to switch to the json-api-dotnet client we used in TDM
+    let checks = movementResponse.data.data.attributes.alvsDecisions.map((decision) =>
+      decision.checks.map((check) =>
+      {
+        return {check: check, context: decision.context, created: decision.decision.serviceHeader.serviceCalled}
+      }
+      )
+    )
+    .flat()
+    .sort((a, b) => a.created < b.created ? -1 : 1)
+
+    checks = checks
+    .map((item) => [
+      { kind: 'text', value: item.check.itemNumber },
+      { kind: 'text', value: item.check.checkCode },
+      { kind: 'text', value: 'TODO' },
+      { kind: 'text', value: item.check.btmsDecisionCode },
+      { kind: 'text', value: item.context.btmsDecisionNumber },
+      { kind: 'text', value: item.check.alvsDecisionCode },
+      { kind: 'text', value: item.context.alvsDecisionNumber },
+      { kind: 'text', value: mediumDateTime(item.created) }
     ])
 
     return h.view('admin/view-history', {
@@ -66,7 +101,8 @@ const viewHistoryController = {
         }
       ],
       history,
-      mrn:request.query.mrn
+      mrn:request.query.mrn,
+      checks
     })
   }
 }
