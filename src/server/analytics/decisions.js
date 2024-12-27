@@ -24,6 +24,8 @@ export const decisionsController = {
     let country = requested.query.country || "fr"
     let dateFrom = requested.query.dateFrom || "2024-11-18"
     let dateTo = requested.query.dateTo || "2024-11-25"
+    let minDate = "2023-01-01"
+    let maxDate = new Date().toISOString().slice(0,10)
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
@@ -89,6 +91,10 @@ export const decisionsController = {
       ],
       decisions,
       exceptions,
+      dateFrom,
+      dateTo,
+      minDate,
+      maxDate,
       analyticsFilter: qs
     })
   }

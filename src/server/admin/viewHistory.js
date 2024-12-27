@@ -27,24 +27,62 @@ const viewHistoryController = {
       }
     })
 
-    const history = historyResponse.data.items.map((entry) => [
-      { kind: 'text', value: entry.auditEntry.createdBy },
-      { kind: 'text', value: entry.auditEntry.status },
-      { kind: 'text', value: entry.resourceType },
-      // { kind: 'text', value: entry.resourceId },
-      { kind: 'link',
-        newWindow: true,
-        url: `/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}`,
-        value: entry.resourceId
-      },
-      { kind: 'text', value: entry.auditEntry.version },
-      {
-        kind: 'text',
-        value: mediumDateTime(entry.auditEntry.createdSource)
-      },
-      // { kind: 'text', value: mediumDateTime(entry.auditEntry.createdLocal) }
+    // const history = historyResponse.data.items.map((entry) => [
+    //   { kind: 'text', value: entry.auditEntry.createdBy },
+    //   { kind: 'text', value: entry.auditEntry.status },
+    //   { kind: 'text', value: entry.resourceType },
+    //   // { kind: 'text', value: entry.resourceId },
+    //   { kind: 'link',
+    //     newWindow: true,
+    //     url: `/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}`,
+    //     value: entry.resourceId
+    //   },
+    //   { kind: 'text', value: entry.auditEntry.version },
+    //   {
+    //     kind: 'text',
+    //     value: mediumDateTime(entry.auditEntry.createdSource)
+    //   },
+    //   // { kind: 'text', value: mediumDateTime(entry.auditEntry.createdLocal) }
+    //
+    // ])
 
-    ])
+    // var keys = {
+    //   'Alvs': {
+    //     'Decisions' : ['alvsDecisionNumber', 'btmsDecisionNumber', 'paired', 'decisionStatus', 'decisionMatched']
+    //   },
+    //   'Btms': {
+    //     'Decisions' : ['alvsDecisionNumber', 'btmsDecisionNumber', 'paired', 'decisionStatus', 'decisionMatched']
+    //   }
+    // }
+
+    // TODO - should we filter out some context
+    const getKeyContext = function(createdBy, resourceType, auditContext) {
+      return auditContext
+    }
+
+    const contextAsList = function(entry) {
+      var items = [
+        `Resource JSON: <a href="/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}">${entry.resourceId}</a>`,
+        `Created Source: ${mediumDateTime(entry.auditEntry.createdSource)}`,
+        `Created Local: ${mediumDateTime(entry.auditEntry.createdLocal)}`
+      ] //'','']
+
+      if (entry.auditEntry.context) {
+        var keyContext = getKeyContext(entry.auditEntry.createdBy, entry.resourceType, entry.auditEntry.context)
+        var context = Object.keys(entry.auditEntry.context).map(key => `${key}: ${entry.auditEntry.context[key]}`)
+        items.push(...context)
+      }
+      return `<p class="govuk-body"><ul><li>${items.join('</li><li>')}</li></ul></p>`
+    }
+
+    const history = historyResponse.data.items.map((entry) => ({
+      heading: {
+        text: `${entry.auditEntry.createdBy} ${entry.auditEntry.status} [${entry.resourceType}:${entry.resourceId} @ ${mediumDateTime(entry.auditEntry.createdSource)}]`
+      },
+      content: {
+        html: contextAsList(entry)
+      }
+    }))
 
     url = `${backendApi}/api/movements/${request.query.mrn}`
 
@@ -57,7 +95,7 @@ const viewHistoryController = {
     })
 
     // TODO - may want to switch to the json-api-dotnet client we used in TDM
-    let checks = movementResponse.data.data.attributes.alvsDecisions.map((decision) =>
+    let checks = movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((decision) =>
       decision.checks.map((check) =>
       {
         return {check: check, context: decision.context, created: decision.decision.serviceHeader.serviceCalled}

@@ -5,7 +5,8 @@ import {
   ErrorSummary,
   Header,
   Radios,
-  SkipLink
+  SkipLink,
+  Accordion
 } from 'govuk-frontend'
 
 import { setup } from './admin-dashboard.js'
@@ -16,6 +17,7 @@ createAll(ErrorSummary)
 createAll(Header)
 createAll(Radios)
 createAll(SkipLink)
+createAll(Accordion)
 
 
 // TBC : Not too sure how to make the analytics setup function available
