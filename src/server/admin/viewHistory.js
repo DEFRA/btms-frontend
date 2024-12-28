@@ -17,15 +17,25 @@ const viewHistoryController = {
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
+
+    const getUrl = async (url) => {
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: 'Basic ' + auth
+          }
+        })
+        return response
+      } catch (err) {
+        throw new Error(`Unable to get URL ${url} : ${err.message}`)
+      }
+    }
+
     let url = `${backendApi}/analytics/timeline?movementId=${request.query.mrn}`
 
     logger.info(`Making API call to ${url}`)
 
-    const historyResponse = await axios.get(url, {
-      headers: {
-        Authorization: 'Basic ' + auth
-      }
-    })
+    var historyResponse= await getUrl(url);
 
     // const history = historyResponse.data.items.map((entry) => [
     //   { kind: 'text', value: entry.auditEntry.createdBy },
@@ -62,7 +72,7 @@ const viewHistoryController = {
 
     const contextAsList = function(entry) {
       var items = [
-        `Resource JSON: <a href="/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}">${entry.resourceId}</a>`,
+        `${entry.resourceType} Resource JSON: <a href="/auth/proxy/api/${entry.resourceApiPrefix}/${entry.resourceId}">${entry.resourceId}</a>`,
         `Created Source: ${mediumDateTime(entry.auditEntry.createdSource)}`,
         `Created Local: ${mediumDateTime(entry.auditEntry.createdLocal)}`
       ] //'','']
@@ -88,33 +98,33 @@ const viewHistoryController = {
 
     logger.info(`Making API call to ${url}`)
 
-    const movementResponse = await axios.get(url, {
-      headers: {
-        Authorization: 'Basic ' + auth
-      }
-    })
+    var movementResponse= await getUrl(url);
 
+    var items =  Object.assign({}, ... movementResponse.data.data.attributes.items.map((x) => ({[x.itemNumber]: x})));
     // TODO - may want to switch to the json-api-dotnet client we used in TDM
-    let checks = movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((decision) =>
-      decision.checks.map((check) =>
-      {
-        return {check: check, context: decision.context, created: decision.decision.serviceHeader.serviceCalled}
-      }
-      )
-    )
+    let checks = movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((decision) => {
+      return decision.checks.map((check) => {
+        var item =  items[check.itemNumber]
+        return {
+          check: check, context: decision.context,
+          item: item, created: decision.decision.serviceHeader.serviceCalled,
+          documents: item.documents.map(d => d.documentReference)
+        }
+      })
+    })
     .flat()
     .sort((a, b) => a.created < b.created ? -1 : 1)
 
     checks = checks
-    .map((item) => [
-      { kind: 'text', value: item.check.itemNumber },
-      { kind: 'text', value: item.check.checkCode },
-      { kind: 'text', value: 'TODO' },
-      { kind: 'text', value: item.check.btmsDecisionCode },
-      { kind: 'text', value: item.context.btmsDecisionNumber },
-      { kind: 'text', value: item.check.alvsDecisionCode },
-      { kind: 'text', value: item.context.alvsDecisionNumber },
-      { kind: 'text', value: mediumDateTime(item.created) }
+    .map((c) => [
+      { kind: 'text', value: c.context.alvsDecisionNumber },
+      { kind: 'text', value: c.check.itemNumber },
+      { kind: 'text', value: c.check.checkCode },
+      { kind: 'text', value: c.documents },
+      { kind: 'text', value: c.check.alvsDecisionCode },
+      { kind: 'text', value: c.context.btmsDecisionNumber },
+      { kind: 'text', value: c.check.btmsDecisionCode },
+      { kind: 'text', value: mediumDateTime(c.created) }
     ])
 
     return h.view('admin/view-history', {
