@@ -39,18 +39,12 @@
     }
   }) %}
 
-    {{ appEntityList({
-        headings: [
-          { text: "Source", size: "small" },
-          { text: "Status", size: "small" },
-          { text: "Type", size: "medium" },
-          { text: "ID", size: "large" },
-          { text: "Version", size: "small" },
-          { text: "Source Time", size: "large" }
-        ],
-        entityRows: history,
-        noResult: "There is no history available at the moment"
-      }) }}
+
+{{ govukAccordion({
+  id: "history",
+  items: history
+}) }}
+
   {% endcall %}
 
 {% endblock %}

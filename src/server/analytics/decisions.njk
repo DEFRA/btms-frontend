@@ -72,11 +72,12 @@
               {
                 value: "2024-11-18",
                 text: "18th November",
-                selected: true
+                selected: dateTo === "2024-11-18"
               },
               {
-                value: "all",
-                text: "All"
+                value: minDate,
+                text: "All",
+                selected: dateFrom === minDate
               }
             ]
           }) }}
@@ -91,11 +92,12 @@
               {
                 value: "2024-11-25",
                 text: "25th November",
-                selected: true
+                selected: dateTo === "2024-11-25"
               },
               {
-                value: "all",
-                text: "All"
+                value: maxDate,
+                text: "All",
+                selected: dateTo === maxDate
               }
             ]
           }) }}
