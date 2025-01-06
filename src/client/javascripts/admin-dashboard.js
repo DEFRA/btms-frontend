@@ -86,6 +86,19 @@ export const setup = async function (analyticsFilter) {
     result.data.lastMonthMovementsByStatus
   )
 
+  createDoughnut(
+    'allImportNotificationsByTypeAndStatus',
+    'All',
+    'All Import Notifications By CHED Type & Link Status',
+    result.data.allImportNotificationsByTypeAndStatus
+  )
+  createDoughnut(
+    'allMovementsByStatus',
+    'All',
+    'All Movements Created By Link Status',
+    result.data.allMovementsByStatus
+  )
+
   createImportNotificationsLinkingByArrival(
     result.data.importNotificationLinkingByArrival
   )
