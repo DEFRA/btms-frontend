@@ -103,7 +103,7 @@ const viewHistoryController = {
     var items =  Object.assign({}, ... movementResponse.data.data.attributes.items.map((x) => ({[x.itemNumber]: x})));
     // TODO - may want to switch to the json-api-dotnet client we used in TDM
     let checks = movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((decision) => {
-      return decision.checks.map((check) => {
+      return decision.context.checks.map((check) => {
         var item =  items[check.itemNumber]
         return {
           check: check, context: decision.context,

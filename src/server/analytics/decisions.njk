@@ -21,19 +21,20 @@
             },
             items: [
               {
-                value: "cheda",
+                value: "Cveda",
                 text: "CHEDA",
-                selected: true
+                selected: chedType == "Cveda"
               },
               {
-                value: "all",
-                text: "All"
+                value: "All",
+                text: "All",
+                selected: chedType == "All"
               }
             ]
           }) }}
           {{ govukSelect({
-            id: "country",
-            name: "country",
+            id: "coo",
+            name: "coo",
             label: {
               text: "Country Of Origin"
             },
@@ -41,11 +42,12 @@
               {
                 value: "FR",
                 text: "France",
-                selected: true
+                selected: coo == "FR"
               },
               {
-                value: "all",
-                text: "All"
+                value: "All",
+                text: "All",
+                selected: coo == "All"
               }
             ]
           }) }}
