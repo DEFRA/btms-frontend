@@ -20,8 +20,8 @@ export const decisionsController = {
     logger.info(`Decisions received request: ${JSON.stringify(requested)}`)
 
     // Some temporary setup whilst we're trying to test a week of November data
-    let chedType = requested.query.chedType || "cheda"
-    let country = requested.query.country || "fr"
+    let chedType = requested.query.chedType || "Cveda"
+    let coo = requested.query.coo || "FR"
     let dateFrom = requested.query.dateFrom || "2024-11-18"
     let dateTo = requested.query.dateTo || "2024-11-25"
     let minDate = "2023-01-01"
@@ -29,7 +29,9 @@ export const decisionsController = {
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
-    const qs = `chedType=${chedType}&country=${country}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+    const chedFilter = coo == "All" ? "" : `chedType=${chedType}&`
+    const cooFilter = coo == "All" ? "" : `coo=${coo}&`
+    const qs = `${chedFilter}${cooFilter}dateFrom=${dateFrom}&dateTo=${dateTo}`
     const url = `${backendApi}/analytics/dashboard?chartsToRender=decisionsByDecisionCode&${qs}`
 
     logger.info(`Making API call to ${url}`)
@@ -95,6 +97,8 @@ export const decisionsController = {
       dateTo,
       minDate,
       maxDate,
+      chedType,
+      coo,
       analyticsFilter: qs
     })
   }
