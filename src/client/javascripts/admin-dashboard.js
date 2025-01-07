@@ -47,8 +47,8 @@ const colourMap = {
   'CHEDP Not Linked': 'rgb(244,164,96)',
   'CHEDPP Linked': 'rgb(0,255,0)',
   'CHEDPP Not Linked': 'rgb(173,255,47)',
-  'Linked': 'rgb(128,128,128)',
-  'Not Linked': 'rgb(224,224,224)',
+  'Not Linked': 'rgb(128,128,128)',
+  'Linked': 'rgb(224,224,224)',
   0: 'rgb(169,169,169)',
   1: 'rgb(169,169,169)',
   2: 'rgb(99,99,99)',
@@ -69,7 +69,8 @@ export const setup = async function (analyticsFilter) {
   const charts = [...document.querySelectorAll('[data-renderer="btms-dashboard"]')]
   const chartNames = charts.map((c) => c.id)
 
-  if (analyticsFilter) analyticsFilter = `&${analyticsFilter}`
+  analyticsFilter = analyticsFilter ? `&${analyticsFilter}` : ''
+
   const url = `/auth/proxy/analytics/dashboard?chartsToRender=${chartNames.join('&chartsToRender=')}${analyticsFilter}`
   const result = await axios.get(url)
 
@@ -99,10 +100,10 @@ export const setup = async function (analyticsFilter) {
     result.data.allMovementsByStatus
   )
 
-  createImportNotificationsLinkingByArrival(
+  createImportNotificationLinkingByArrival(
     result.data.importNotificationLinkingByArrival
   )
-  createImportNotificationsLinkingByCreated(
+  createImportNotificationLinkingByCreated(
     result.data.importNotificationLinkingByCreated
   )
 
@@ -229,9 +230,9 @@ export const setup = async function (analyticsFilter) {
 /**
  * @param {any} data
  */
-function createImportNotificationsLinkingByCreated(data) {
+function createImportNotificationLinkingByCreated(data) {
   createDateLineChart(
-    'importNotificationsLinkingByCreated',
+    'importNotificationLinkingByCreated',
     'Import Notifications Created Last Month By CHED Type & Link Status',
     'Created Date',
     'day',
@@ -242,9 +243,9 @@ function createImportNotificationsLinkingByCreated(data) {
 /**
  * @param {any} data
  */
-function createImportNotificationsLinkingByArrival(data) {
+function createImportNotificationLinkingByArrival(data) {
   createDateLineChart(
-    'importNotificationsLinkingByArrival',
+    'importNotificationLinkingByArrival',
     'Import Notifications Arriving By CHED Type & Link Status',
     'Arrival Date',
     'day',
