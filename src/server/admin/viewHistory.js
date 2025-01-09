@@ -101,31 +101,36 @@ const viewHistoryController = {
     var movementResponse= await getUrl(url);
 
     var items =  Object.assign({}, ... movementResponse.data.data.attributes.items.map((x) => ({[x.itemNumber]: x})));
-    // TODO - may want to switch to the json-api-dotnet client we used in TDM
-    let checks = movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((decision) => {
-      return decision.context.checks.map((check) => {
-        var item =  items[check.itemNumber]
-        return {
-          check: check, context: decision.context,
-          item: item, created: decision.decision.serviceHeader.serviceCalled,
-          documents: item.documents.map(d => d.documentReference)
-        }
-      })
+    var decisions =  Object.assign({}, ... movementResponse.data.data.attributes.alvsDecisionStatus.decisions.map((x) => ({[x.decision.header.decisionNumber]: x})));
+
+    var alvsDecisionStatus = movementResponse.data.data.attributes.alvsDecisionStatus
+    var decisionComparison = alvsDecisionStatus.context.decisionComparison
+    var alvsDecisionNumber = alvsDecisionStatus.context.alvsDecisionNumber
+
+    let checks = decisionComparison.checks.map((check) => {
+      var item =  items[check.itemNumber]
+
+      var alvsDecision = decisions[alvsDecisionNumber]
+      return {
+        check: check, context: alvsDecision.context,
+        item: item, created: alvsDecision.decision.serviceHeader.serviceCalled,
+        documents: item.documents.map(d => d.documentReference)
+      }
     })
     .flat()
     .sort((a, b) => a.created < b.created ? -1 : 1)
 
     checks = checks
-    .map((c) => [
-      { kind: 'text', value: c.context.alvsDecisionNumber },
-      { kind: 'text', value: c.check.itemNumber },
-      { kind: 'text', value: c.check.checkCode },
-      { kind: 'text', value: c.documents },
-      { kind: 'text', value: c.check.alvsDecisionCode },
-      { kind: 'text', value: c.context.btmsDecisionNumber },
-      { kind: 'text', value: c.check.btmsDecisionCode },
-      { kind: 'text', value: mediumDateTime(c.created) }
-    ])
+      .map((c) => [
+        { kind: 'text', value: c.context.alvsDecisionNumber },
+        { kind: 'text', value: c.check.itemNumber },
+        { kind: 'text', value: c.check.checkCode },
+        { kind: 'text', value: c.documents },
+        { kind: 'text', value: c.check.alvsDecisionCode },
+        { kind: 'text', value: decisionComparison.btmsDecisionNumber },
+        { kind: 'text', value: c.check.btmsDecisionCode },
+        { kind: 'text', value: mediumDateTime(c.created) }
+      ])
 
     return h.view('admin/view-history', {
       pageTitle: 'Admin',
