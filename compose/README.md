@@ -69,19 +69,32 @@ Running the initialise method will load an initial dataset in from DMP:
 
 `http://btms-backend.localtest.me:9080/mgmt/initialise?syncPeriod=All`
 
-The state of the work can be seen here:
+The state of the work can be seen here. Monitor the jobs queue until the 2 initial jobs for clearance requests & import notifications complete:
 
 `http://btms-backend.localtest.me:9080/sync/jobs`
 
+Once clearance requests have been synched you can load decisions:
+
+`http://btms-backend.localtest.me:9080/sync/decisions?syncPeriod=All`
+
+This endpoint shows the mongo collections & record counts:
+
 `http://btms-backend.localtest.me:9080/mgmt/collections`
 
-With logs & metrics:
+You can query our analytics endpoints by chart name, for example:
+
+`http://btms-backend.localtest.me:9080/analytics/dashboard?chartsToRender=movementsBySegment`
+
+To see logs & metrics in our telemetry instance:
 
 `http://grafana.localtest.me:9000/a/grafana-lokiexplore-app`
 
 `http://grafana.localtest.me:9000/d/ce451ma3l1nuoc/btms-backend`
 
-And the analytics dashboard here:
+And the analytics dashboard in the UI here:
 
 `http://localhost:9081/analytics`
 
+And decisions here:
+
+`http://localhost:9081/analytics/decisions`
