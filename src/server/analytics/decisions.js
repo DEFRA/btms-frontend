@@ -22,8 +22,8 @@ export const decisionsController = {
     // Some temporary setup whilst we're trying to test a week of November data
     let chedType = requested.query.chedType || "Cveda"
     let coo = requested.query.coo || "FR"
-    let dateFrom = requested.query.dateFrom || "2024-11-18"
-    let dateTo = requested.query.dateTo || "2024-11-25"
+    let dateFrom = requested.query.dateFrom || "2024-12-16"
+    let dateTo = requested.query.dateTo || "2024-12-23"
     let minDate = "2023-01-01"
     let maxDate = new Date().toISOString().slice(0,10)
 

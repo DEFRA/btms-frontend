@@ -57,11 +57,11 @@ const colourMap = {
   // 5: 'rgb(169,169,169)',
   // 6: 'rgb(45,45,45)',
   // 7: 'rgb(25,25,25)',
-  'largeNumber': 'rgb(0,0,0)',
-  'Alvs Decision Version 1 Not Present': 'rgb(99,99,99)',
   'Btms Made Same Decision As Alvs': 'rgb(169,169,169)',
-  'Btms Made Different Decision To Alvs': 'rgb(0,0,0)',
+  'Has Ched PP Checks': 'rgb(169,169,169)',
+  'Alvs Decision Version 1 Not Present': 'rgb(99,99,99)',
   'Alvs Decision Not Present': 'rgb(99,99,99)',
+  'No Import Notifications Linked': 'rgb(99,99,99)',
 }
 
 export const setup = async function (analyticsFilter) {
