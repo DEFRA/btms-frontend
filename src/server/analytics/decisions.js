@@ -29,8 +29,8 @@ export const decisionsController = {
 
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
-    const chedFilter = coo == "All" ? "" : `chedType=${chedType}&`
-    const cooFilter = coo == "All" ? "" : `coo=${coo}&`
+    const chedFilter = chedType === "All" ? "" : `chedType=${chedType}&`
+    const cooFilter = coo === "All" ? "" : `coo=${coo}&`
     const qs = `${chedFilter}${cooFilter}dateFrom=${dateFrom}&dateTo=${dateTo}`
     const url = `${backendApi}/analytics/dashboard?chartsToRender=decisionsByDecisionCode&${qs}`
 
