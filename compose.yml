@@ -131,7 +131,7 @@ services:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
     volumes:
-      - ".\\compose\\asbconfig.json:/ServiceBus_Emulator/ConfigFiles/Config.json"
+      - "./compose/asbconfig.json:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
     environment:
