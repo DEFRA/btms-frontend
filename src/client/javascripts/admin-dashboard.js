@@ -62,6 +62,7 @@ const colourMap = {
   'Alvs Decision Version 1 Not Present': 'rgb(99,99,99)',
   'Alvs Decision Not Present': 'rgb(99,99,99)',
   'No Import Notifications Linked': 'rgb(99,99,99)',
+  'Expected': 'rgb(169,169,169)',
 }
 
 export const setup = async function (analyticsFilter) {
@@ -218,6 +219,14 @@ export const setup = async function (analyticsFilter) {
   }
 
   createDoughnut(
+    'movementsBySegment',
+    'All',
+    'Movements By Segment',
+    result.data.movementsBySegment.summary,
+    'bottom'
+  )
+
+  createDoughnut(
     'movementsExceptions',
     'All',
     'Movement Exceptions',
@@ -264,6 +273,10 @@ function noData(elementId, canvas) {
   console.log('No data for %s on %s', elementId, canvas) // eslint-disable-line no-console
 }
 
+function getColour(text, defaultColour) {
+  return colourMap[text] || colourMap[defaultColour];
+}
+
 /**
  * @param {string} elementId
  * @param {string} title
@@ -293,7 +306,7 @@ function createDateLineChart(
 
   const datasets = data.map((r) => ({
     label: r.name,
-    borderColor: colourMap[r.name],
+    borderColor: getColour(r.name),
     data: r.periods.map((d) => d.value)
   }))
 
@@ -360,7 +373,7 @@ function createLineChart(elementId, title, xAxisLabel, xAxisUnit, data) {
 
   const datasets = data.map((r) => ({
     label: r.name,
-    borderColor: colourMap[r.name],
+    borderColor: getColour(r.name),
     data: r.results.map((r) => r.value)
   }))
 
@@ -424,7 +437,7 @@ function createDoughnut(elementId, period, title, data, legendPosition='left') {
       {
         label: title,
         data: Object.values(data),
-        backgroundColor: Object.keys(data).map((k) => colourMap[k] || colourMap['largeNumber']),
+        backgroundColor: Object.keys(data).map((k) => getColour(k.startsWith('CDMS') ? 'Expected' : k, 'largeNumber')),
         hoverOffset: 4
       }
     ]
