@@ -218,13 +218,15 @@ export const setup = async function (analyticsFilter) {
     )
   }
 
-  createDoughnut(
-    'movementsBySegment',
-    'All',
-    'Movements By Segment',
-    result.data.movementsBySegment.summary,
-    'bottom'
-  )
+  if (result.data.movementsBySegment) {
+    createDoughnut(
+      'movementsBySegment',
+      'All',
+      'Movements By Segment',
+      result.data.movementsBySegment.summary,
+      'bottom'
+    )
+  }
 
   createDoughnut(
     'movementsExceptions',
