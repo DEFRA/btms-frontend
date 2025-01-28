@@ -26,7 +26,7 @@ export const decisionsController = {
     let dateTo = requested.query.dateTo || "2024-12-23"
     let minDate = "2023-01-01"
     let maxDate = new Date().toISOString().slice(0,10)
-    let finalisedOnly = (requested.query.mrnFilters || ['finalisedOnly']).includes('finalisedOnly');
+    let finalisedOnly = (requested.query.mrnFilters || []).includes('finalisedOnly');
     const backendApi = config.get('coreBackend.apiUrl')
     const authedUser = await request.getUserSession()
     const chedFilter = chedType === "All" ? "" : `chedType=${chedType}&`
