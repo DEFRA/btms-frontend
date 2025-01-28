@@ -106,7 +106,20 @@
     </div>
 
     <div class="govuk-grid-column-one-third">
-
+      {{ govukCheckboxes({
+        name: "mrnFilters",
+        classes: "govuk-checkboxes--small",
+        hint: {
+          text: "MRN Filters, select all that apply"
+        },
+        items: [
+          {
+            value: "finalisedOnly",
+            text: "Finalised Only",
+            checked: finalisedOnly
+          }
+        ]
+      }) }}
     </div>
   </div>
   </form>
