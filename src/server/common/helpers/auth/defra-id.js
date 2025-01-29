@@ -19,78 +19,95 @@ const defraId = {
       const clientId = config.get('defraId.clientId')
       const clientSecret = config.get('defraId.clientSecret')
       const authCallbackUrl = config.get('appBaseUrl') + '/auth/callback'
+      const enabled = config.get('defraId.enabled')
 
       await server.register(bell)
 
+      // if (!enabled) {
+      //   return
+      // }
       // TODO : This oidcConf not being typed is causing a problem - unsure why
       /**
        * @returns {{authorization_endpoint: string, token_endpoint: string, end_session_endpoint: string}}
        */
-      const oidcConf = await fetch(oidcConfigurationUrl).then((res) =>
-        res.json()
-      )
+      if (enabled) {
 
-      server.auth.strategy('defra-id', 'bell', {
-        location: (request) => {
-          if (request.info.referrer) {
-            request.yar.flash('referrer', request.info.referrer)
-          }
+        const oidcConf = await fetch(oidcConfigurationUrl).then((res) =>
+          res.json()
+        )
 
-          return authCallbackUrl
-        },
-        provider: {
-          name: 'defra-id',
-          protocol: 'oauth2',
-          useParamsAuth: true,
-
-          // @ts-expect-error erorring due to oidcConf format above
-          auth: oidcConf.authorization_endpoint,
-          // @ts-expect-error erorring due to oidcConf format above
-          token: oidcConf.token_endpoint,
-          scope: ['openid', 'offline_access'],
-          profile: function (credentials, params) {
-            const payload = jwt.token.decode(credentials.token).decoded.payload
-            const displayName = [payload.firstName, payload.lastName]
-              .filter((part) => part)
-              .join(' ')
-
-            credentials.profile = {
-              id: payload.sub,
-              correlationId: payload.correlationId,
-              sessionId: payload.sessionId,
-              contactId: payload.contactId,
-              serviceId: payload.serviceId,
-              firstName: payload.firstName,
-              lastName: payload.lastName,
-              displayName,
-              email: payload.email,
-              uniqueReference: payload.uniqueReference,
-              loa: payload.loa,
-              aal: payload.aal,
-              enrolmentCount: payload.enrolmentCount,
-              enrolmentRequestCount: payload.enrolmentRequestCount,
-              currentRelationshipId: payload.currentRelationshipId,
-              relationships: payload.relationships,
-              roles: payload.roles,
-              idToken: params.id_token,
-              jwt: credentials.token,
-              jwt_contents: JSON.stringify(payload),
-              // @ts-expect-error erorring due to oidcConf format above
-              tokenUrl: oidcConf.token_endpoint,
-              // @ts-expect-error erorring due to oidcConf format above
-              logoutUrl: oidcConf.end_session_endpoint
+        server.auth.strategy('defra-id', 'bell', {
+          location: (request) => {
+            if (request.info.referrer) {
+              request.yar.flash('referrer', request.info.referrer)
             }
+
+            return authCallbackUrl
+          },
+          provider: {
+            name: 'defra-id',
+            protocol: 'oauth2',
+            useParamsAuth: true,
+
+            // @ts-expect-error erorring due to oidcConf format above
+            auth: oidcConf.authorization_endpoint,
+            // @ts-expect-error erorring due to oidcConf format above
+            token: oidcConf.token_endpoint,
+            scope: ['openid', 'offline_access'],
+            profile: function (credentials, params) {
+              const payload = jwt.token.decode(credentials.token).decoded.payload
+              const displayName = [payload.firstName, payload.lastName]
+                .filter((part) => part)
+                .join(' ')
+
+              credentials.profile = {
+                id: payload.sub,
+                correlationId: payload.correlationId,
+                sessionId: payload.sessionId,
+                contactId: payload.contactId,
+                serviceId: payload.serviceId,
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                displayName,
+                email: payload.email,
+                uniqueReference: payload.uniqueReference,
+                loa: payload.loa,
+                aal: payload.aal,
+                enrolmentCount: payload.enrolmentCount,
+                enrolmentRequestCount: payload.enrolmentRequestCount,
+                currentRelationshipId: payload.currentRelationshipId,
+                relationships: payload.relationships,
+                roles: payload.roles,
+                idToken: params.id_token,
+                jwt: credentials.token,
+                jwt_contents: JSON.stringify(payload),
+                // @ts-expect-error erorring due to oidcConf format above
+                tokenUrl: oidcConf.token_endpoint,
+                // @ts-expect-error erorring due to oidcConf format above
+                logoutUrl: oidcConf.end_session_endpoint
+              }
+            }
+          },
+          password: config.get('session.cookie.password'),
+          clientId,
+          clientSecret,
+          cookie: 'bell-defra-id',
+          isSecure: false,
+          providerParams: {
+            serviceId
           }
-        },
-        password: config.get('session.cookie.password'),
-        clientId,
-        clientSecret,
-        cookie: 'bell-defra-id',
-        isSecure: false,
-        providerParams: {
-          serviceId
-        }
-      })
+        })
+      }
+      else {
+        // Add a dummy auth
+        server.auth.strategy('defra-id', 'basic', {
+          validate: async (request, username, password) => {
+            // TODO
+            console.log("basic auth")
+            return true
+          }
+        })
+      }
     }
   }
 }
