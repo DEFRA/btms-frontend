@@ -105,6 +105,12 @@ export const config = convict({
     env: 'APP_BASE_URL'
   },
   defraId: {
+    enabled: {
+      doc: 'Is Auth Enabled?',
+      format: Boolean,
+      env: 'DEFRA_ID_ENABLED',
+      default: true
+    },
     manageAccountUrl: {
       doc: 'DEFRA ID Manage Account URL, defaults to docker compose defra ID stub',
       format: String,
