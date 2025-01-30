@@ -89,6 +89,7 @@ export const config = convict({
     apiPassword: {
       doc: 'Password for backend API Auth.',
       format: String,
+      sensitive: true,
       default: 'a498HnJ79A5G',
       env: 'CORE_BACKEND_API_PASSWORD'
     },
