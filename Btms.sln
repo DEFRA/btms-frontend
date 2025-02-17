@@ -95,6 +95,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGenerator.IntegrationTe
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Btms.Scheduler", "..\btms-scheduler\Btms.Scheduler.njsproj", "{BBE810E8-94D9-432C-AD3D-F94C12C5141C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Btms.Backend.Cli.Tests", "..\btms-backend\Btms.Backend.Cli.Tests\Btms.Backend.Cli.Tests.csproj", "{571B5359-95F8-4197-8A18-CC6ABC190FE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Btms.Types.Tests", "..\btms-backend\Btms.Types.Tests\Btms.Types.Tests.csproj", "{634ECA8D-6BE4-4803-A74A-FCB33032BF3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +241,14 @@ Global
 		{B08ED116-4443-4BA5-A1C1-15920421044C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B08ED116-4443-4BA5-A1C1-15920421044C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B08ED116-4443-4BA5-A1C1-15920421044C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{571B5359-95F8-4197-8A18-CC6ABC190FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{571B5359-95F8-4197-8A18-CC6ABC190FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{571B5359-95F8-4197-8A18-CC6ABC190FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{571B5359-95F8-4197-8A18-CC6ABC190FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{634ECA8D-6BE4-4803-A74A-FCB33032BF3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{634ECA8D-6BE4-4803-A74A-FCB33032BF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{634ECA8D-6BE4-4803-A74A-FCB33032BF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{634ECA8D-6BE4-4803-A74A-FCB33032BF3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -283,6 +295,8 @@ Global
 		{8D7B2CF4-B652-43D8-9234-AFD3B4DD6BFB} = {DA9D400F-A52F-4FF2-A736-E4EA5531275D}
 		{B08ED116-4443-4BA5-A1C1-15920421044C} = {3E3258BB-3A37-44A2-BD16-0CE6281CEF9D}
 		{BBE810E8-94D9-432C-AD3D-F94C12C5141C} = {3E3258BB-3A37-44A2-BD16-0CE6281CEF9D}
+		{571B5359-95F8-4197-8A18-CC6ABC190FE1} = {3E3258BB-3A37-44A2-BD16-0CE6281CEF9D}
+		{634ECA8D-6BE4-4803-A74A-FCB33032BF3E} = {6F439646-2994-4307-92F8-CB2D3DA288F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E9ECA82-73FF-4728-8332-4EF7710F84C7}
