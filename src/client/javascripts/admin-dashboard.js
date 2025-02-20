@@ -215,11 +215,19 @@ export const setup = async function (analyticsFilter) {
     createDoughnut(
       'decisionsByDecisionCode',
       'All',
-      'Decision Classification',
+      'Decision Comparison',
       result.data.decisionsByDecisionCode.summary,
       'bottom'
     )
   }
+
+  createDoughnut(
+    'decisionsByBusinessDecisionStatus',
+    'All',
+    'Business Decision Comparison',
+    result.data.decisionsByBusinessDecisionStatus,
+    'bottom'
+  )
 
   if (result.data.movementsBySegment) {
     createDoughnut(
