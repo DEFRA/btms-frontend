@@ -66,6 +66,21 @@ const colourMap = {
   'Alvs Decision Not Present': 'rgb(99,99,99)',
   'No Import Notifications Linked': 'rgb(99,99,99)',
   'Expected': 'rgb(169,169,169)',
+
+  // decisionsByBusinessDecisionStatus
+  'Manual Releases': 'rgb(169,169,169)',
+  'Match - Complete Match': 'rgb(169,169,169)',
+  "Match - Group Match": 'rgb(169,169,169)',
+  "Anything Else": 'rgb(99,99,99)'
+
+  // 'BTMS Data Error Decision': 'rgb(169,169,169)',
+  // These would be black...
+  // "ALVS Hold, BTMS Not Held": 225,
+  // "ALVS Not Held, BTMS Hold": 60,
+  // "ALVS Release, BTMS Not Released": 1500,
+  // "ALVS Not Released, BTMS Released": 112,
+  // "ALVS Refuse, BTMS Not Refused": 4,
+  // "ALVS Not Refused, BTMS Refused": 1,
 }
 
 export const setup = async function (analyticsFilter) {
