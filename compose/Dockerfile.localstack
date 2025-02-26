@@ -9,6 +9,6 @@ EXPOSE 4530 4531 4532 4533 4534 4535 4536 4537 4538 4539
 EXPOSE 4540 4541 4542 4543 4544 4545 4546 4547 4548 4549
 EXPOSE 4550 4551 4552 4553 4554 4555 4556 4557 4558 4559
 
-COPY start-localstack.sh /etc/localstack/init/ready.d/
+COPY ./compose/start-localstack.sh /etc/localstack/init/ready.d/
 RUN chmod +x /etc/localstack/init/ready.d/start-localstack.sh
 
