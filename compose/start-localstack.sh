@@ -34,8 +34,8 @@ aws --endpoint-url=$ENDPOINT_URL sqs create-queue --attributes FifoQueue=true --
 SNS_ARN=arn:aws:sns:eu-west-2:000000000000
 SQS_ARN=arn:aws:sqs:eu-west-2:000000000000
 
-aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CCR --protocol sqs --notification-endpoint $SQS_ARN:$CCR
-aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CFN --protocol sqs --notification-endpoint $SQS_ARN:$CFN
-aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CEN --protocol sqs --notification-endpoint $SQS_ARN:$CEN
-aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$ADN --protocol sqs --notification-endpoint $SQS_ARN:$ADN
-aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$AEN --protocol sqs --notification-endpoint $SQS_ARN:$AEN
+aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CCR --protocol sqs --notification-endpoint $SQS_ARN:$CCR --attributes '{"RawMessageDelivery": "true"}'
+aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CFN --protocol sqs --notification-endpoint $SQS_ARN:$CFN --attributes '{"RawMessageDelivery": "true"}'
+aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$CEN --protocol sqs --notification-endpoint $SQS_ARN:$CEN --attributes '{"RawMessageDelivery": "true"}'
+aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$ADN --protocol sqs --notification-endpoint $SQS_ARN:$ADN --attributes '{"RawMessageDelivery": "true"}'
+aws --endpoint-url=$ENDPOINT_URL sns subscribe --topic-arn $SNS_ARN:$AEN --protocol sqs --notification-endpoint $SQS_ARN:$AEN --attributes '{"RawMessageDelivery": "true"}'
